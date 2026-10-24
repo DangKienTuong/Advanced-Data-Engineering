@@ -1,7 +1,7 @@
 \babel@toc {english}{}\relax 
-\beamer@sectionintoc {1}{Introduction \& Search Fundamentals}{4}{0}{1}
-\beamer@sectionintoc {2}{Elasticsearch 8.15: Distributed Full-Text \& Hybrid Search}{7}{0}{2}
-\beamer@sectionintoc {3}{Apache Cassandra 5.0: Scalable Wide-Column Store \& SAI}{15}{0}{3}
-\beamer@sectionintoc {4}{Modern Research Frontier \& Combined Architecture}{23}{0}{4}
-\beamer@sectionintoc {5}{Experimental Demo \& Quantitative Benchmark ($N=50,000$)}{28}{0}{5}
-\beamer@sectionintoc {6}{Conclusion}{37}{0}{6}
+\beamer@sectionintoc {1}{Introduction \& Search Fundamentals}{3}{0}{1}
+\beamer@sectionintoc {2}{Elasticsearch 8.15: Distributed Full-Text \& Hybrid Search}{6}{0}{2}
+\beamer@sectionintoc {3}{Apache Cassandra 5.0: Scalable Wide-Column Store \& SAI}{14}{0}{3}
+\beamer@sectionintoc {4}{Modern Research Frontier \& Combined Architecture}{22}{0}{4}
+\beamer@sectionintoc {5}{Experimental Demo \& Quantitative Benchmark ($N=50,000$)}{27}{0}{5}
+\beamer@sectionintoc {6}{Conclusion}{36}{0}{6}
