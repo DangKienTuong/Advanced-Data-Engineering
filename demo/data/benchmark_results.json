@@ -1,0 +1,125 @@
+{
+  "elasticsearch": [
+    {
+      "name": "ES 1. Full-Text BM25 (match)",
+      "engine": "Elasticsearch 8.15",
+      "hits": 10000,
+      "mean_ms": 9.66,
+      "p50_ms": 9.29,
+      "p95_ms": 12.25,
+      "server_took_ms": 3.24
+    },
+    {
+      "name": "ES 2. Fuzzy Multi-Match (AUTO)",
+      "engine": "Elasticsearch 8.15",
+      "hits": 8280,
+      "mean_ms": 13.82,
+      "p50_ms": 12.93,
+      "p95_ms": 19.94,
+      "server_took_ms": 7.52
+    },
+    {
+      "name": "ES 3. Edge N-Gram Autocomplete",
+      "engine": "Elasticsearch 8.15",
+      "hits": 1029,
+      "mean_ms": 7.29,
+      "p50_ms": 7.18,
+      "p95_ms": 8.39,
+      "server_took_ms": 1.48
+    },
+    {
+      "name": "ES 4. Bool + Cached Bitset Filters",
+      "engine": "Elasticsearch 8.15",
+      "hits": 113,
+      "mean_ms": 9.16,
+      "p50_ms": 8.23,
+      "p95_ms": 12.77,
+      "server_took_ms": 2.72
+    },
+    {
+      "name": "ES 5. Faceted Aggregations (50K docs)",
+      "engine": "Elasticsearch 8.15",
+      "hits": 10000,
+      "mean_ms": 7.21,
+      "p50_ms": 7.03,
+      "p95_ms": 10.01,
+      "server_took_ms": 1.0
+    },
+    {
+      "name": "ES 6. Hybrid Search (BM25 + HNSW kNN)",
+      "engine": "Elasticsearch 8.15",
+      "hits": 10000,
+      "mean_ms": 12.6,
+      "p50_ms": 10.55,
+      "p95_ms": 18.26,
+      "server_took_ms": 4.72
+    }
+  ],
+  "cassandra": [
+    {
+      "name": "CQL 1. Partition Key Lookup O(1)",
+      "engine": "Cassandra 5.0",
+      "hits": 5,
+      "mean_ms": 1.74,
+      "p50_ms": 1.7,
+      "p95_ms": 2.0
+    },
+    {
+      "name": "CQL 2. Partition + Clustering Range",
+      "engine": "Cassandra 5.0",
+      "hits": 5,
+      "mean_ms": 2.87,
+      "p50_ms": 2.31,
+      "p95_ms": 6.92
+    },
+    {
+      "name": "CQL 3. SAI Equality (brand='Sony')",
+      "engine": "Cassandra 5.0",
+      "hits": 5,
+      "mean_ms": 4.0,
+      "p50_ms": 3.84,
+      "p95_ms": 5.36
+    },
+    {
+      "name": "CQL 4. Partition + SAI Numeric Range",
+      "engine": "Cassandra 5.0",
+      "hits": 5,
+      "mean_ms": 4.43,
+      "p50_ms": 4.4,
+      "p95_ms": 5.81
+    },
+    {
+      "name": "CQL 5. SAI Vector Search (ANN OF)",
+      "engine": "Cassandra 5.0",
+      "hits": 5,
+      "mean_ms": 9.33,
+      "p50_ms": 8.31,
+      "p95_ms": 10.36
+    },
+    {
+      "name": "CQL 6. ALLOW FILTERING (50K Full Scan)",
+      "engine": "Cassandra 5.0",
+      "hits": 3,
+      "mean_ms": 124.67,
+      "p50_ms": 115.88,
+      "p95_ms": 192.23
+    }
+  ],
+  "scaling": {
+    "5000": {
+      "partition_key": 1.56,
+      "sai_brand": 1.55,
+      "allow_filtering": 5.38
+    },
+    "25000": {
+      "partition_key": 0.95,
+      "sai_brand": 2.94,
+      "allow_filtering": 27.0
+    },
+    "50000": {
+      "partition_key": 1.03,
+      "sai_brand": 1.87,
+      "allow_filtering": 41.29
+    }
+  }
+}

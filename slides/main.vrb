@@ -1,50 +1,45 @@
-\frametitle{Live Demo: Cassandra Anti-Patterns \& Search Failures}
+\frametitle{Live Demo: Semantic Vector ANN (Cassandra 5.0) \& Hybrid Search (ES 8.15)}
 \begin{columns}[T]
-\begin{column}{0.52\textwidth}
-\textbf{\scriptsize 1. Filtering Without Index $\rightarrow$ Refused! (Demo 5)}
-\begin{lstlisting}[language=SQL]
-CQL> SELECT name FROM shop.products_by_category
-     WHERE stock > 100 LIMIT 5;
-
-InvalidRequest: Error from server: code=2200 [Invalid query]
-message="Cannot execute this query as it might involve data
-filtering and thus may have unpredictable performance. If you
-want to execute this query despite the performance
-unpredictability, use ALLOW FILTERING"
+\begin{column}{0.49\textwidth}
+\textbf{\tiny ES Demo 10: Hybrid BM25 + HNSW Vector kNN}
+\begin{lstlisting}
+POST /products/_search
+{ "size": 3, "query": { "match": { "description": {
+    "query": "portable travel", "boost": 0.5 }}},
+  "knn": { "field": "embedding", "k": 10, "num_candidates": 50,
+    "query_vector": [0.64,0.54,0.09,0.09,0.50,0.18,0.0,0.0],
+    "boost": 0.5 }, "_source": ["name", "category", "price"] }
 \end{lstlisting}
-
-\textbf{\scriptsize 2. Full-Text \texttt{LIKE} Pattern $\rightarrow$ Refused! (Demo 7)}
-\begin{lstlisting}[language=SQL]
-CQL> SELECT name FROM shop.products_by_category
-     WHERE description LIKE '%laptop%' LIMIT 3;
-
-InvalidRequest: Error from server: code=2200 [Invalid query]
-message="LIKE restriction is only supported on properly
-indexed columns. description LIKE '%laptop%' is not valid."
+\textbf{\tiny Real Execution Output ($p_{50} = 10.55\text{ ms}$, 4.7 ms engine):}
+\begin{lstlisting}
+"hits": [
+  { "_id": "13271", "_score": 1.1621861, "_source": {
+      "name": "MSI AirLite 586", "price": 2869.58, "rating": 4.6 }},
+  { "_id": "45405", "_score": 1.1621354, "_source": {
+      "name": "Acer WorkStation 865", "price": 2802.16, "rating": 3.8 }},
+  { "_id": "3160",  "_score": 1.0807763, "_source": {
+      "name": "Asus ThinkBook 970", "price": 1372.59, "rating": 3.2 }}]
 \end{lstlisting}
 \end{column}
-\begin{column}{0.45\textwidth}
-\textbf{\scriptsize 3. Forcing \texttt{ALLOW FILTERING} (Demo 6)}
+\begin{column}{0.49\textwidth}
+\textbf{\tiny Cassandra Demo 9: SAI JVector \texttt{ANN OF} Search}
 \begin{lstlisting}[language=SQL]
-CQL> SELECT name, stock
-     FROM shop.products_by_category
-     WHERE stock > 100 LIMIT 5
-     ALLOW FILTERING;
-
- name                     | stock
---------------------------+-------
- Breville BrewPerfect 454 |   488
- DeLonghi BrewPerfect 161 |   175
-  Philips BrewPerfect 968 |   332
-    Nespresso MokaPro 354 |   456
-     Breville MokaPro 381 |   253
+SELECT name, category, price, similarity_cosine(embedding,
+  [0.64,0.54,0.09,0.09,0.50,0.18,0.0,0.0]) AS sem_score
+FROM shop.products_by_category WHERE category='laptops'
+ORDER BY embedding ANN OF [0.64,0.54,0.09,0.09,0.50,0.18,0.0,0.0] LIMIT 5;
 \end{lstlisting}
-\begin{alertblock}{\scriptsize Why This Matters in Production}
-\scriptsize
-\begin{itemize}
-    \item \texttt{ALLOW FILTERING} scans all partitions until \texttt{LIMIT 5} is satisfied (or scans 100\% of the cluster if $<5$ rows match).
-    \item \textbf{Takeaway:} Never use Cassandra for ad-hoc text search; pair it with Elasticsearch!
-\end{itemize}
-\end{alertblock}
+\textbf{\tiny Real Execution Output ($p_{50} = 8.31\text{ ms}$):}
+\begin{lstlisting}
+ name                 | category | price   | sem_score
+----------------------+----------+---------+-----------
+   Asus ThinkBook 970 |  laptops | 1372.59 |   0.99793
+       HP AirLite 496 |  laptops | 3261.94 |  0.997846
+ Asus WorkStation 110 |  laptops | 2587.89 |  0.997543
+    MSI UltraBook 338 |  laptops |  544.02 |  0.997511
+      MSI AirLite 586 |  laptops | 2869.58 |  0.997435
+\end{lstlisting}
+\tiny
+\textbf{Insight:} Both engines find \texttt{Asus ThinkBook 970} \& \texttt{MSI AirLite 586} as top semantic matches; ES further re-ranks them using lexical BM25!
 \end{column}
 \end{columns}

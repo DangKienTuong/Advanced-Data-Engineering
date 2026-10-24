@@ -58,6 +58,42 @@
     \field{year}{2024}
   \endentry
 
+  \entry{rrf}{inproceedings}{}{}
+    \name{author}{3}{}{%
+      {{hash=CGV}{%
+         family={Cormack},
+         familyi={C\bibinitperiod},
+         given={Gordon\bibnamedelima V.},
+         giveni={G\bibinitperiod\bibinitdelim V\bibinitperiod},
+      }}%
+      {{hash=CCLA}{%
+         family={Clarke},
+         familyi={C\bibinitperiod},
+         given={Charles L.\bibnamedelima A.},
+         giveni={C\bibinitperiod\bibinitdelim L\bibinitperiod\bibinitdelim
+  A\bibinitperiod},
+      }}%
+      {{hash=BS}{%
+         family={Buettcher},
+         familyi={B\bibinitperiod},
+         given={Stefan},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{CGVCCLABS1}
+    \strng{fullhash}{CGVCCLABS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{C}
+    \field{sortinithash}{C}
+    \field{booktitle}{Proceedings of the 32nd International ACM SIGIR
+  Conference on Research and Development in Information Retrieval}
+    \field{pages}{758\bibrangedash 759}
+    \field{title}{Reciprocal Rank Fusion Outperforms Condorcet and Individual
+  Rank Learning Methods}
+    \field{year}{2009}
+  \endentry
+
   \entry{elastic_docs}{misc}{}{}
     \name{author}{1}{}{%
       {{hash=E}{%
@@ -158,6 +194,37 @@
     \field{year}{2010}
   \endentry
 
+  \entry{hnsw}{article}{}{}
+    \name{author}{2}{}{%
+      {{hash=MYA}{%
+         family={Malkov},
+         familyi={M\bibinitperiod},
+         given={Yu\bibnamedelima A.},
+         giveni={Y\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=YDA}{%
+         family={Yashunin},
+         familyi={Y\bibinitperiod},
+         given={Dmitry\bibnamedelima A.},
+         giveni={D\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{MYAYDA1}
+    \strng{fullhash}{MYAYDA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{M}
+    \field{sortinithash}{M}
+    \field{number}{4}
+    \field{pages}{824\bibrangedash 836}
+    \field{title}{Efficient and Robust Approximate Nearest Neighbor Search
+  Using Hierarchical Navigable Small World Graphs}
+    \field{volume}{42}
+    \field{journaltitle}{IEEE Transactions on Pattern Analysis and Machine
+  Intelligence}
+    \field{year}{2020}
+  \endentry
+
   \entry{lsm}{inproceedings}{}{}
     \name{author}{4}{}{%
       {{hash=OP}{%
@@ -226,6 +293,53 @@
     \field{volume}{3}
     \field{journaltitle}{Foundations and Trends in Information Retrieval}
     \field{year}{2009}
+  \endentry
+
+  \entry{diskann}{inproceedings}{}{}
+    \name{author}{5}{}{%
+      {{hash=SSJ}{%
+         family={Subramanya},
+         familyi={S\bibinitperiod},
+         given={Suhas\bibnamedelima Jayaram},
+         giveni={S\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=DF}{%
+         family={Devvrit},
+         familyi={D\bibinitperiod},
+         given={Fnu},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=SHV}{%
+         family={Simhadri},
+         familyi={S\bibinitperiod},
+         given={Harsha\bibnamedelima Vardhan},
+         giveni={H\bibinitperiod\bibinitdelim V\bibinitperiod},
+      }}%
+      {{hash=KR}{%
+         family={Krishnawamy},
+         familyi={K\bibinitperiod},
+         given={Ravishankar},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=KR}{%
+         family={Kadekodi},
+         familyi={K\bibinitperiod},
+         given={Rohan},
+         giveni={R\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SSJ+1}
+    \strng{fullhash}{SSJDFSHVKRKR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{booktitle}{Advances in Neural Information Processing Systems
+  (NeurIPS)}
+    \field{title}{{DiskANN}: Fast Accurate Billion-Point Nearest Neighbor
+  Search on a Single Node}
+    \field{volume}{32}
+    \field{year}{2019}
   \endentry
 
   \entry{inverted}{inproceedings}{}{}

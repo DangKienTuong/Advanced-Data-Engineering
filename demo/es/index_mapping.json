@@ -33,13 +33,24 @@
           "keyword": { "type": "keyword" }
         }
       },
-      "category":    { "type": "keyword" },
-      "brand":       { "type": "keyword" },
-      "description": { "type": "text", "analyzer": "english_custom" },
-      "price":       { "type": "float" },
-      "rating":      { "type": "float" },
-      "stock":       { "type": "integer" },
-      "review_count":{ "type": "integer" }
+      "category":     { "type": "keyword" },
+      "brand":        { "type": "keyword" },
+      "description":  { "type": "text", "analyzer": "english_custom" },
+      "price":        { "type": "float" },
+      "rating":       { "type": "float" },
+      "stock":        { "type": "integer" },
+      "review_count": { "type": "integer" },
+      "embedding": {
+        "type": "dense_vector",
+        "dims": 8,
+        "index": true,
+        "similarity": "cosine",
+        "index_options": {
+          "type": "hnsw",
+          "m": 16,
+          "ef_construction": 100
+        }
+      }
     }
   }
 }

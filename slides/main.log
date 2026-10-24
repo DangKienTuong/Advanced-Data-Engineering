@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.10.18)  24 OCT 2026 11:30
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.10.18)  24 OCT 2026 12:25
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2086,32 +2086,12 @@ Package pdftex.def Info: images/FrontBackground.pdf  used on input line 108.
 
 {/usr/local/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/loc
 al/texlive/2026/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc} <./images/
-FrontBackground.pdf>] (./main.toc)
-<images/Background.pdf, id=92, 963.6pt x 542.025pt>
-File: images/Background.pdf Graphic file (type pdf)
-<use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 121.
-(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
- [2
-
- <./images/Background.pdf>] (./main.toc)
-File: images/Background.pdf Graphic file (type pdf)
-<use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 124.
-(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
-[3
-
-]
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `cmtt' (encoding: T1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
- (/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/mt-cmr.cfg
+FrontBackground.pdf>] (./main.toc
+(/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/mt-cmr.cfg
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
 (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msa on input line 158
-.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 6.
 
 (/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
@@ -2119,8 +2099,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 (/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 158
-.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 6.
 
 (/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -2128,55 +2107,99 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 (/usr/local/texlive/2026/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+stmry on input line 1
-58.
+LaTeX Font Info:    Trying to load font information for U+stmry on input line 6
+.
 
-(/usr/local/texlive/2026/texmf-dist/tex/latex/stmaryrd/Ustmry.fd)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/stmaryrd/Ustmry.fd))
+<images/Background.pdf, id=93, 963.6pt x 542.025pt>
 File: images/Background.pdf Graphic file (type pdf)
 <use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 158.
+Package pdftex.def Info: images/Background.pdf  used on input line 121.
+(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
+ [2
+
+ <./images/Background.pdf>]
+
+Package microtype Warning: I cannot find a protrusion list for font
+(microtype)                `T5/cmss/bx/n/6'. Switching off
+(microtype)                protrusion for this font on input line 156.
+
+
+Underfull \hbox (badness 4699) in paragraph at lines 156--156
+[]|\T1/cmss/m/n/6 (+20) Consistent Hash-ing, LSM-Tree me-chan-ics,
+ []
+
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `cmtt' (encoding: T1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+
+Underfull \hbox (badness 10000) in paragraph at lines 156--156
+[]|\T1/cmss/m/n/6 (+20) Partition/clustering phys-i-cal schema,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 156--156
+\T1/cmss/m/n/6 (+20) Wide-Partition buck-et-ing & Com-paction
+ []
+
+
+Underfull \hbox (badness 1303) in paragraph at lines 156--156
+[]|\T1/cmtt/m/n/6 generate_data.py \T1/cmss/m/n/6 (+20) ($\OML/cmm/m/it/6 N \OT
+1/cmr/m/n/6 (+20) = 50\OML/cmm/m/it/6 ; \OT1/cmr/m/n/6 (+20) 000$ \T1/cmss/m/n/
+6 (+20) prod-ucts,
+ []
+
+File: images/Background.pdf Graphic file (type pdf)
+<use images/Background.pdf>
+Package pdftex.def Info: images/Background.pdf  used on input line 156.
+(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
+[3
+
+] (./main.toc)
+File: images/Background.pdf Graphic file (type pdf)
+<use images/Background.pdf>
+Package pdftex.def Info: images/Background.pdf  used on input line 159.
 (pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
  [4
 
 ]
+Overfull \vbox (5.31767pt too high) detected at line 193
+ []
+
 File: images/Background.pdf Graphic file (type pdf)
 <use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 215.
+Package pdftex.def Info: images/Background.pdf  used on input line 193.
 (pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
- [5
+[5
 
 ]
-(./main.toc)
 File: images/Background.pdf Graphic file (type pdf)
 <use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 218.
+Package pdftex.def Info: images/Background.pdf  used on input line 250.
 (pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
  [6
 
-]
+] (./main.toc)
 File: images/Background.pdf Graphic file (type pdf)
 <use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 267.
+Package pdftex.def Info: images/Background.pdf  used on input line 253.
 (pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
  [7
 
 ]
 File: images/Background.pdf Graphic file (type pdf)
 <use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 320.
+Package pdftex.def Info: images/Background.pdf  used on input line 302.
 (pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
  [8
 
 ]
-\openout4 = `main.vrb'.
-
- (./main.vrb
 LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <8> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 4.
-)
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 350.
 File: images/Background.pdf Graphic file (type pdf)
 <use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 373.
+Package pdftex.def Info: images/Background.pdf  used on input line 350.
 (pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
  [9
 
@@ -2186,7 +2209,7 @@ Package pdftex.def Info: images/Background.pdf  used on input line 373.
  (./main.vrb)
 File: images/Background.pdf Graphic file (type pdf)
 <use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 429.
+Package pdftex.def Info: images/Background.pdf  used on input line 405.
 (pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
  [10
 
@@ -2196,52 +2219,85 @@ Package pdftex.def Info: images/Background.pdf  used on input line 429.
  (./main.vrb)
 File: images/Background.pdf Graphic file (type pdf)
 <use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 483.
+Package pdftex.def Info: images/Background.pdf  used on input line 461.
 (pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
-
-[11
+ [11
 
 ]
 \openout4 = `main.vrb'.
 
- (./main.vrb)
+
+(./main.vrb)
 File: images/Background.pdf Graphic file (type pdf)
 <use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 541.
+Package pdftex.def Info: images/Background.pdf  used on input line 515.
 (pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
  [12
+
+]
+\openout4 = `main.vrb'.
+
+ (./main.vrb
+LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <6> not available
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 4.
+
+Overfull \hbox (48.33331pt too wide) detected at line 39
+[][] \OT1/cmr/m/n/6 = [] = 0\OML/cmm/m/it/6 :\OT1/cmr/m/n/6 53843\OML/cmm/m/it/
+6 ;  S \OT1/cmr/m/n/6 = 2\OML/cmm/m/it/6 :\OT1/cmr/m/n/6 2 \OMS/cmsy/m/n/6 ^^B 
+[] ^^B [][] \OT1/cmr/m/n/6 = []
+ []
+
+
+Overfull \hbox (48.33331pt too wide) detected at line 48
+[][] \OT1/cmr/m/n/6 = [] = 0\OML/cmm/m/it/6 :\OT1/cmr/m/n/6 69998\OML/cmm/m/it/
+6 ;  S \OT1/cmr/m/n/6 = 2\OML/cmm/m/it/6 :\OT1/cmr/m/n/6 2 \OMS/cmsy/m/n/6 ^^B 
+[] ^^B [][] \OT1/cmr/m/n/6 = []
+ []
+
+)
+Overfull \vbox (4.61143pt too high) detected at line 577
+ []
+
+File: images/Background.pdf Graphic file (type pdf)
+<use images/Background.pdf>
+Package pdftex.def Info: images/Background.pdf  used on input line 577.
+(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
+[13
+
+]
+File: images/Background.pdf Graphic file (type pdf)
+<use images/Background.pdf>
+Package pdftex.def Info: images/Background.pdf  used on input line 623.
+(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
+ [14
 
 ] (./main.toc)
 File: images/Background.pdf Graphic file (type pdf)
 <use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 544.
-(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
- [13
-
-]
-LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <6> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 581.
-File: images/Background.pdf Graphic file (type pdf)
-<use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 581.
-(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
- [14
-
-]
-File: images/Background.pdf Graphic file (type pdf)
-<use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 627.
+Package pdftex.def Info: images/Background.pdf  used on input line 626.
 (pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
  [15
 
 ]
-LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <10.95> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 675.
 File: images/Background.pdf Graphic file (type pdf)
 <use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 675.
+Package pdftex.def Info: images/Background.pdf  used on input line 663.
 (pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
  [16
+
+]
+File: images/Background.pdf Graphic file (type pdf)
+<use images/Background.pdf>
+Package pdftex.def Info: images/Background.pdf  used on input line 709.
+(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
+ [17
+
+]
+File: images/Background.pdf Graphic file (type pdf)
+<use images/Background.pdf>
+Package pdftex.def Info: images/Background.pdf  used on input line 759.
+(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
+ [18
 
 ]
 \openout4 = `main.vrb'.
@@ -2252,110 +2308,68 @@ File: lstlang1.sty 2025/11/14 1.11b listings language file
 ))
 File: images/Background.pdf Graphic file (type pdf)
 <use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 720.
-(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
- [17
-
-]
-\openout4 = `main.vrb'.
-
-
-(./main.vrb
-Underfull \hbox (badness 10000) in paragraph at lines 33--34
-[]|\T1/cmss/m/n/6 (+20) Attached to
- []
-
-
-Underfull \hbox (badness 4686) in paragraph at lines 37--38
-[]|\T1/cmss/m/n/6 (+20) Intersects post-ing
- []
-
-)
-File: images/Background.pdf Graphic file (type pdf)
-<use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 773.
-(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
- [18
-
-]
-\openout4 = `main.vrb'.
-
- (./main.vrb)
-File: images/Background.pdf Graphic file (type pdf)
-<use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 823.
+Package pdftex.def Info: images/Background.pdf  used on input line 805.
 (pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
  [19
-
-] (./main.toc)
-File: images/Background.pdf Graphic file (type pdf)
-<use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 826.
-(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
- [20
-
-]
-Underfull \hbox (badness 3168) in paragraph at lines 858--858
-[]|\T1/cmss/m/n/6 (+20) Ultra-High (append-only com-mit log + RAM
- []
-
-File: images/Background.pdf Graphic file (type pdf)
-<use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 858.
-(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
-[21
-
-]
-File: images/Background.pdf Graphic file (type pdf)
-<use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 907.
-(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
- [22
-
-] (./main.toc)
-File: images/Background.pdf Graphic file (type pdf)
-<use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 910.
-(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
- [23
-
-]
-File: images/Background.pdf Graphic file (type pdf)
-<use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 959.
-(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
- [24
-
-]
-\openout4 = `main.vrb'.
-
- (./main.vrb)
-File: images/Background.pdf Graphic file (type pdf)
-<use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 1020.
-(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
- [25
-
-]
-\openout4 = `main.vrb'.
-
- (./main.vrb)
-File: images/Background.pdf Graphic file (type pdf)
-<use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 1087.
-(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
- [26
 
 ]
 \openout4 = `main.vrb'.
 
 
 (./main.vrb)
+Overfull \vbox (2.67953pt too high) detected at line 856
+ []
+
 File: images/Background.pdf Graphic file (type pdf)
 <use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 1154.
+Package pdftex.def Info: images/Background.pdf  used on input line 856.
 (pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
- [27
+[20
+
+]
+\openout4 = `main.vrb'.
+
+ (./main.vrb
+Underfull \hbox (badness 10000) in paragraph at lines 31--31
+[]|\T1/cmss/bx/n/6 (+20) LCS \T1/cmss/m/n/6 (+20) (Lev-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 31--31
+[]|\T1/cmss/m/n/6 (+20) Fixed-size non-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 31--31
+\T1/cmss/m/n/6 (+20) overlapping lev-els
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 31--32
+[]|\T1/cmss/m/n/6 (+20) Read-heavy point
+ []
+
+
+Underfull \hbox (badness 2050) in paragraph at lines 31--32
+\T1/cmss/m/n/6 (+20) lookups (90% reads
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 33--34
+[]|\T1/cmss/m/n/6 (+20) Modern mixed
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 33--34
+\T1/cmss/m/n/6 (+20) read/write + SAI
+ []
+
+)
+File: images/Background.pdf Graphic file (type pdf)
+<use images/Background.pdf>
+Package pdftex.def Info: images/Background.pdf  used on input line 906.
+(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
+ [21
 
 ]
 \openout4 = `main.vrb'.
@@ -2363,54 +2377,201 @@ Package pdftex.def Info: images/Background.pdf  used on input line 1154.
  (./main.vrb)
 File: images/Background.pdf Graphic file (type pdf)
 <use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 1210.
+Package pdftex.def Info: images/Background.pdf  used on input line 958.
 (pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
- [28
+ [22
 
 ] (./main.toc)
 File: images/Background.pdf Graphic file (type pdf)
 <use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 1213.
+Package pdftex.def Info: images/Background.pdf  used on input line 961.
 (pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
- [29
+ [23
 
 ]
 File: images/Background.pdf Graphic file (type pdf)
 <use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 1252.
+Package pdftex.def Info: images/Background.pdf  used on input line 1021.
+(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
+ [24
+
+]
+Underfull \hbox (badness 4859) in paragraph at lines 1052--1052
+[]|\T1/cmss/m/n/6 (+20) Ultra-High (append-only com-mit log + RAM
+ []
+
+File: images/Background.pdf Graphic file (type pdf)
+<use images/Background.pdf>
+Package pdftex.def Info: images/Background.pdf  used on input line 1052.
+(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
+[25
+
+]
+File: images/Background.pdf Graphic file (type pdf)
+<use images/Background.pdf>
+Package pdftex.def Info: images/Background.pdf  used on input line 1101.
+(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
+ [26
+
+]
+File: images/Background.pdf Graphic file (type pdf)
+<use images/Background.pdf>
+Package pdftex.def Info: images/Background.pdf  used on input line 1152.
+(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
+ [27
+
+]
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 1155.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 1155.
+
+(./main.toc)
+File: images/Background.pdf Graphic file (type pdf)
+<use images/Background.pdf>
+Package pdftex.def Info: images/Background.pdf  used on input line 1155.
+(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
+ [28
+
+]
+Overfull \hbox (62.58441pt too wide) in paragraph at lines 1205--1205
+ [] 
+ []
+
+File: images/Background.pdf Graphic file (type pdf)
+<use images/Background.pdf>
+Package pdftex.def Info: images/Background.pdf  used on input line 1205.
+(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
+[29
+
+]
+\openout4 = `main.vrb'.
+
+ (./main.vrb)
+File: images/Background.pdf Graphic file (type pdf)
+<use images/Background.pdf>
+Package pdftex.def Info: images/Background.pdf  used on input line 1261.
 (pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
  [30
 
 ]
+\openout4 = `main.vrb'.
 
-LaTeX Font Warning: Font shape `T1/cmss/m/sc' in size <10.95> not available
-(Font)              Font shape `T1/cmr/m/sc' tried instead on input line 1261.
+ (./main.vrb)
+File: images/Background.pdf Graphic file (type pdf)
+<use images/Background.pdf>
+Package pdftex.def Info: images/Background.pdf  used on input line 1321.
+(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
+ [31
+
+]
+\openout4 = `main.vrb'.
+
+ (./main.vrb)
+File: images/Background.pdf Graphic file (type pdf)
+<use images/Background.pdf>
+Package pdftex.def Info: images/Background.pdf  used on input line 1384.
+(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
+ [32
+
+]
+\openout4 = `main.vrb'.
+
+ (./main.vrb
+Overfull \hbox (31.77359pt too wide) in paragraph at lines 34--35
+[][][][][][][][]  
+ []
+
+)
+File: images/Background.pdf Graphic file (type pdf)
+<use images/Background.pdf>
+Package pdftex.def Info: images/Background.pdf  used on input line 1437.
+(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
+ [33
+
+]
+\openout4 = `main.vrb'.
+
+ (./main.vrb
+Overfull \hbox (3.98438pt too wide) in paragraph at lines 35--36
+[][][]  
+ []
+
+)
+Overfull \vbox (12.4802pt too high) detected at line 1488
+ []
 
 File: images/Background.pdf Graphic file (type pdf)
 <use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 1261.
+Package pdftex.def Info: images/Background.pdf  used on input line 1488.
 (pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
-[31
+[34
+
+]
+File: images/Background.pdf Graphic file (type pdf)
+<use images/Background.pdf>
+Package pdftex.def Info: images/Background.pdf  used on input line 1564.
+(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
+ [35
+
+]
+Overfull \hbox (10.9892pt too wide) in paragraph at lines 1639--1639
+    [] 
+ []
+
+File: images/Background.pdf Graphic file (type pdf)
+<use images/Background.pdf>
+Package pdftex.def Info: images/Background.pdf  used on input line 1639.
+(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
+[36
+
+] (./main.toc)
+File: images/Background.pdf Graphic file (type pdf)
+<use images/Background.pdf>
+Package pdftex.def Info: images/Background.pdf  used on input line 1642.
+(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
+ [37
+
+]
+File: images/Background.pdf Graphic file (type pdf)
+<use images/Background.pdf>
+Package pdftex.def Info: images/Background.pdf  used on input line 1681.
+(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
+ [38
+
+]
+
+LaTeX Font Warning: Font shape `T1/cmss/m/sc' in size <10.95> not available
+(Font)              Font shape `T1/cmr/m/sc' tried instead on input line 1690.
+
+File: images/Background.pdf Graphic file (type pdf)
+<use images/Background.pdf>
+Package pdftex.def Info: images/Background.pdf  used on input line 1690.
+(pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
+[39
 
  </usr/local/texlive/2026/texmf-dist/tex/latex/beamer/beamericonarticle.pdf>]
 File: images/Background.pdf Graphic file (type pdf)
 <use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 1261.
+Package pdftex.def Info: images/Background.pdf  used on input line 1690.
 (pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
- [32
+ [40
 
 
 ]
 
 Package microtype Warning: I cannot find a protrusion list for font
 (microtype)                `T5/cmss/m/n/10'. Switching off
-(microtype)                protrusion for this font on input line 1279.
+(microtype)                protrusion for this font on input line 1708.
 
 File: images/Background.pdf Graphic file (type pdf)
 <use images/Background.pdf>
-Package pdftex.def Info: images/Background.pdf  used on input line 1279.
+Package pdftex.def Info: images/Background.pdf  used on input line 1708.
 (pdftex.def)             Requested size: 455.2446pt x 256.08334pt.
-[33
+[41
 
 ]
 \tf@nav=\write9
@@ -2428,60 +2589,67 @@ LaTeX2e <2026-06-01>
 L3 programming layer <2026-09-09>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: D8306A7426A9BCC8DEA341D23C535B69;1356.
+(rerunfilecheck)             Checksum: 993E0B0BBDD92CF15FF8028760DF26DC;1637.
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 54074 strings out of 467050
- 1152678 string characters out of 5406312
- 2151294 words of memory out of 5000000
- 82303 multiletter control sequences out of 15000+600000
- 666296 words of font info for 214 fonts, out of 8000000 for 9000
+ 54476 strings out of 467050
+ 1160228 string characters out of 5406312
+ 2151047 words of memory out of 5000000
+ 82636 multiletter control sequences out of 15000+600000
+ 672739 words of font info for 245 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 128i,15n,123p,1881b,2400s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb>
-</usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex7.p
-fb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex
-8.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10
-.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.p
-fb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb
-></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><
-/usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></u
-sr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/
-local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/loc
-al/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/
-texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/t
-exlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/tex
-live/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texli
-ve/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive
-/2026/texmf-dist/fonts/type1/public/cm-super/sfcc1095.pfb></usr/local/texlive/2
-026/texmf-dist/fonts/type1/public/cm-super/sfit0800.pfb></usr/local/texlive/202
-6/texmf-dist/fonts/type1/public/cm-super/sfsi0600.pfb></usr/local/texlive/2026/
-texmf-dist/fonts/type1/public/cm-super/sfsi0800.pfb></usr/local/texlive/2026/te
-xmf-dist/fonts/type1/public/cm-super/sfsi1095.pfb></usr/local/texlive/2026/texm
-f-dist/fonts/type1/public/cm-super/sfsi1440.pfb></usr/local/texlive/2026/texmf-
-dist/fonts/type1/public/cm-super/sfso0800.pfb></usr/local/texlive/2026/texmf-di
-st/fonts/type1/public/cm-super/sfss0500.pfb></usr/local/texlive/2026/texmf-dist
-/fonts/type1/public/cm-super/sfss0600.pfb></usr/local/texlive/2026/texmf-dist/f
-onts/type1/public/cm-super/sfss0800.pfb></usr/local/texlive/2026/texmf-dist/fon
-ts/type1/public/cm-super/sfss1000.pfb></usr/local/texlive/2026/texmf-dist/fonts
-/type1/public/cm-super/sfss1095.pfb></usr/local/texlive/2026/texmf-dist/fonts/t
-ype1/public/cm-super/sfsx0600.pfb></usr/local/texlive/2026/texmf-dist/fonts/typ
-e1/public/cm-super/sfsx0800.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1
-/public/cm-super/sfsx1000.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/p
-ublic/cm-super/sfsx1095.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/pub
-lic/cm-super/sfsx1440.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/publi
-c/cm-super/sfsx2488.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/
-cm-super/sftt0800.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm
--super/sftt1000.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-s
-uper/sftt1095.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/vntex/vnr/vns
-s10.pfb>
-Output written on main.pdf (33 pages, 1780117 bytes).
+ 128i,17n,123p,1881b,2400s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx5.pfb>
+</usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx6.pfb></
+usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></us
+r/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex7.pfb><
+/usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex8.pf
+b></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
+></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb>
+</usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></
+usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></us
+r/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/
+local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/lo
+cal/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/loca
+l/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/t
+exlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texl
+ive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive
+/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/20
+26/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/202
+6/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2026/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2026/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2026/texm
+f-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb></usr/local/texlive/2026/t
+exmf-dist/fonts/type1/public/cm-super/sfcc1095.pfb></usr/local/texlive/2026/tex
+mf-dist/fonts/type1/public/cm-super/sfit0800.pfb></usr/local/texlive/2026/texmf
+-dist/fonts/type1/public/cm-super/sfsi0600.pfb></usr/local/texlive/2026/texmf-d
+ist/fonts/type1/public/cm-super/sfsi0800.pfb></usr/local/texlive/2026/texmf-dis
+t/fonts/type1/public/cm-super/sfsi1095.pfb></usr/local/texlive/2026/texmf-dist/
+fonts/type1/public/cm-super/sfsi1440.pfb></usr/local/texlive/2026/texmf-dist/fo
+nts/type1/public/cm-super/sfso0600.pfb></usr/local/texlive/2026/texmf-dist/font
+s/type1/public/cm-super/sfso0800.pfb></usr/local/texlive/2026/texmf-dist/fonts/
+type1/public/cm-super/sfss0500.pfb></usr/local/texlive/2026/texmf-dist/fonts/ty
+pe1/public/cm-super/sfss0600.pfb></usr/local/texlive/2026/texmf-dist/fonts/type
+1/public/cm-super/sfss0800.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/
+public/cm-super/sfss1000.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/pu
+blic/cm-super/sfss1095.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/publ
+ic/cm-super/sfsx0600.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public
+/cm-super/sfsx0800.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/c
+m-super/sfsx1000.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-
+super/sfsx1095.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-su
+per/sfsx1440.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-supe
+r/sfsx2488.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/
+sftt0800.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sf
+tt1000.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sftt
+1095.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/vntex/vnr/vnss10.pfb><
+/usr/local/texlive/2026/texmf-dist/fonts/type1/vntex/vnr/vnssbx10.pfb>
+Output written on main.pdf (41 pages, 1945939 bytes).
 PDF statistics:
- 1504 PDF objects out of 1728 (max. 8388607)
- 1196 compressed objects within 12 object streams
- 82 named destinations out of 1000 (max. 500000)
- 73543 words of extra memory for PDF output out of 74296 (max. 10000000)
+ 1868 PDF objects out of 2073 (max. 8388607)
+ 1476 compressed objects within 15 object streams
+ 101 named destinations out of 1000 (max. 500000)
+ 84065 words of extra memory for PDF output out of 89155 (max. 10000000)
 
