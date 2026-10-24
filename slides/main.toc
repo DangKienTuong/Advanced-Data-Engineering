@@ -1,0 +1,7 @@
+\babel@toc {english}{}\relax 
+\beamer@sectionintoc {1}{Introduction \& Search Fundamentals}{3}{0}{1}
+\beamer@sectionintoc {2}{Elasticsearch: Distributed Full-Text Search}{6}{0}{2}
+\beamer@sectionintoc {3}{Apache Cassandra: Scalable Wide-Column Store}{13}{0}{3}
+\beamer@sectionintoc {4}{Comparative Analysis \& Combined Architecture}{20}{0}{4}
+\beamer@sectionintoc {5}{Experimental Demo \& Live Results}{23}{0}{5}
+\beamer@sectionintoc {6}{Conclusion}{29}{0}{6}

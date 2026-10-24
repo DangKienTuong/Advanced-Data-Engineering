@@ -1,0 +1,47 @@
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.3
+    container_name: de-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - cluster.name=de-search-demo
+    ports:
+      - "9200:9200"
+    volumes:
+      - ./data:/demo-data:ro
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -qE '(green|yellow)'"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  cassandra:
+    image: cassandra:5.0
+    container_name: de-cassandra
+    environment:
+      - CASSANDRA_CLUSTER_NAME=de-search-demo
+      - MAX_HEAP_SIZE=1G
+      - HEAP_NEWSIZE=256M
+    ports:
+      - "9042:9042"
+    volumes:
+      - ./data:/demo-data:ro
+      - ./cassandra:/demo-cql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "cqlsh -e 'describe cluster' || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 40
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.15.3
+    container_name: de-kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy

@@ -1,0 +1,1281 @@
+\documentclass[aspectratio=169]{beamer}
+\usetheme{Madrid}
+\usefonttheme{structurebold}
+\usefonttheme[onlymath]{serif}
+
+\definecolor{BKTemplate}{rgb}{0.11765, 0.30588, 0.47451}
+\usecolortheme[named=BKTemplate]{structure}
+\setbeamercolor{title}{fg=BKTemplate,bg=}
+\setbeamertemplate{caption}[numbered]
+
+\usepackage[utf8]{inputenc}
+\usepackage[T5,T1]{fontenc}    % T5 for Vietnamese names, T1 default for English
+\usepackage[vietnamese,english]{babel}
+\newcommand{\vn}[1]{\foreignlanguage{vietnamese}{#1}}
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{mathtools}
+\usepackage{multicol}
+\usepackage{comment}
+\usepackage{forest}
+\usepackage[linesnumbered, ruled]{algorithm2e}
+\usepackage{algorithmic}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{graphicx}
+\usepackage{diagbox}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, calc, fit}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{dsfont}
+\usepackage{stmaryrd}
+\usepackage{listings}
+\usepackage[style=authortitle,backend=bibtex]{biblatex}
+\addbibresource{references.bib}
+
+\definecolor{codebg}{rgb}{0.95, 0.96, 0.98}
+\definecolor{codeframe}{rgb}{0.75, 0.80, 0.88}
+\definecolor{dkgreen}{rgb}{0.0, 0.45, 0.15}
+\definecolor{dkred}{rgb}{0.65, 0.10, 0.10}
+\definecolor{dkblue}{rgb}{0.10, 0.25, 0.60}
+
+\lstset{
+  backgroundcolor=\color{codebg},
+  frame=single,
+  rulecolor=\color{codeframe},
+  basicstyle=\ttfamily\tiny,
+  breaklines=true,
+  breakatwhitespace=true,
+  showstringspaces=false,
+  tabsize=2,
+  keywordstyle=\color{dkblue}\bfseries,
+  stringstyle=\color{dkgreen},
+  commentstyle=\color{gray}\itshape,
+  aboveskip=2pt,
+  belowskip=2pt,
+  xleftmargin=3pt,
+  xrightmargin=3pt
+}
+
+\renewcommand{\footnotesize}{\tiny}
+\newcommand{\mathbi}[1]{\boldsymbol{#1}}
+\newtheorem{proposition}{Proposition}
+
+%------------------------------------------------------------
+% Title page configuration
+\title[Search in ES \& Cassandra]
+{\vspace*{0.8cm}\\\textbf{DATA ENGINEERING (CO5173) -- FINAL PROJECT}\\\textbf{Search Techniques in Modern Database Systems:}\\\textbf{Elasticsearch \& Cassandra}}
+
+\subtitle{}
+
+\author[Advanced Data Engineering]
+{Supervisor: Assoc. Prof. \vn{Trần Minh Quang}\\
+Students: \vn{Đặng Kiến Tường} (2670391) -- \vn{Đặng Minh Quân} (2670358)}
+
+\institute[]
+{
+  Faculty of Computer Science and Engineering\\
+  Ho Chi Minh City University of Technology (HCMUT)\\
+  Vietnam National University Ho Chi Minh City (VNU-HCM)
+}
+
+\date[Semester 261]
+{Semester 261 -- Academic Year 2026--2027}
+%------------------------------------------------------------
+
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\begin{document}
+
+%---------------------------------------------------------
+% SLIDE 1: Title page
+%---------------------------------------------------------
+\setbeamertemplate{background canvas}{
+	\includegraphics[width=\paperwidth,height=\paperheight]{images/FrontBackground.pdf}
+}
+\begin{frame}[plain]
+\titlepage
+\end{frame}
+
+% Set background for all remaining pages
+\setbeamertemplate{background canvas}{
+	\includegraphics[width=\paperwidth,height=\paperheight]{images/Background.pdf}
+}
+
+%---------------------------------------------------------
+% SLIDE 2: Table of Contents
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Table of Contents}
+\tableofcontents
+\end{frame}
+
+%=========================================================
+\section{Introduction \& Search Fundamentals}
+%=========================================================
+
+%---------------------------------------------------------
+% SLIDE 3: Motivation
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Motivation: Why Search is Critical in Modern Systems}
+\begin{columns}[T]
+\begin{column}{0.52\textwidth}
+\begin{block}{Modern Data Scale \& User Expectations}
+\small
+\begin{itemize}
+    \item \textbf{E-Commerce Catalogs:} Millions of products; users expect sub-100ms responses, typo tolerance, faceted filters, and personalized ranking.
+    \item \textbf{Observability \& Logs:} Petabytes of semi-structured events requiring real-time ad-hoc text search and aggregations.
+    \item \textbf{Social Media \& Messaging:} Billions of messages indexed simultaneously by user/channel key and full-text content.
+\end{itemize}
+\end{block}
+\end{column}
+\begin{column}{0.45\textwidth}
+\begin{alertblock}{Why Traditional RDBMS Struggle}
+\small
+\begin{itemize}
+    \item \texttt{WHERE description LIKE '\%laptop\%'} forces a \textbf{full table scan} $O(N)$.
+    \item B-trees only index exact prefixes (\texttt{'laptop\%'}), not arbitrary tokens.
+    \item No built-in \textbf{relevance scoring} (all matching rows returned with equal weight).
+    \item Vertical scaling bottlenecks under heavy read/write concurrency.
+\end{itemize}
+\end{alertblock}
+\vspace{0.05cm}
+\small
+\textbf{Core Question:} How do \textbf{Elasticsearch} (search engine) and \textbf{Cassandra} (wide-column store) solve retrieval at scale?
+\end{column}
+\end{columns}
+\end{frame}
+
+%---------------------------------------------------------
+% SLIDE 4: Search Fundamentals
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Search Fundamentals: Inverted Index \& Ranking Formulas}
+\begin{columns}[T]
+\begin{column}{0.46\textwidth}
+\textbf{Inverted Index Structure} \cite{inverted}
+\scriptsize
+\begin{itemize}
+    \item Maps each unique \textbf{term} (in a sorted Term Dictionary / FST) to a \textbf{posting list} of document IDs, term frequencies, and positions.
+\end{itemize}
+\vspace{0.05cm}
+\centering
+\tiny
+\begin{tabular}{lll}
+\toprule
+\textbf{Term} & \textbf{DF} & \textbf{Posting List (Doc : TF)} \\
+\midrule
+\texttt{camera}     & 2 & $[D_1: 2, \; D_3: 1]$ \\
+\texttt{laptop}     & 2 & $[D_2: 1, \; D_4: 3]$ \\
+\texttt{waterproof} & 1 & $[D_1: 1]$ \\
+\bottomrule
+\end{tabular}
+\vspace{0.1cm}
+\raggedright
+\scriptsize
+\begin{itemize}
+    \item \textbf{FST (Finite State Transducer):} Compresses term dictionary in memory for fast prefix and fuzzy traversal.
+    \item \textbf{Skip Lists / Roaring Bitmaps:} Accelerate boolean conjunctions ($\cap$) and disjunctions ($\cup$).
+\end{itemize}
+\end{column}
+\begin{column}{0.51\textwidth}
+\textbf{From TF-IDF to Okapi BM25} \cite{bm25}
+\scriptsize
+\begin{itemize}
+    \item \textbf{TF-IDF:} $\text{TF}(t,d) \times \text{IDF}(t)$ grows unboundedly with term frequency.
+    \item \textbf{BM25} adds \textbf{term saturation} ($k_1$) and \textbf{document length normalization} ($b$):
+\end{itemize}
+\vspace{-0.2cm}
+{\tiny
+\[
+\text{BM25}(D, Q) = \sum_{t \in Q} \text{IDF}(t) \cdot \frac{f(t, D) \cdot (k_1 + 1)}{f(t, D) + k_1 \cdot \left(1 - b + b \cdot \frac{|D|}{\text{avgdl}}\right)}
+\]
+\[
+\text{IDF}(t) = \ln\!\left(1 + \frac{N - n(t) + 0.5}{n(t) + 0.5}\right)
+\]
+}
+\scriptsize
+\begin{itemize}
+    \item $k_1 \approx 1.2$: controls TF saturation asymptote.
+    \item $b \approx 0.75$: penalizes long documents ($|D| > \text{avgdl}$).
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+%=========================================================
+\section{Elasticsearch: Distributed Full-Text Search}
+%=========================================================
+
+%---------------------------------------------------------
+% SLIDE 5: Elasticsearch Overview
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Elasticsearch Overview \& Distributed Architecture}
+\begin{columns}[T]
+\begin{column}{0.52\textwidth}
+\textbf{Core Architectural Concepts} \cite{elasticsearch,elastic_docs}
+\scriptsize
+\begin{itemize}
+    \item \textbf{Cluster \& Nodes:} A collection of nodes coordinating storage and distributed search execution.
+    \item \textbf{Index:} Logical namespace mapping to one or more physical shards.
+    \item \textbf{Shard (Lucene Instance):} Self-contained Apache Lucene index consisting of immutable \textbf{segments}.
+    \begin{itemize}
+        \scriptsize
+        \item \textbf{Primary Shard:} Handles indexing writes first.
+        \item \textbf{Replica Shard:} Redundant copy for high availability and read throughput scaling.
+    \end{itemize}
+    \item \textbf{Scatter--Gather Search:} Coordinating node broadcasts query to shards, merges top-$K$ scores.
+\end{itemize}
+\end{column}
+\begin{column}{0.45\textwidth}
+\centering
+\vspace{0.1cm}
+\begin{tikzpicture}[scale=0.78, transform shape,
+  nodebox/.style={rectangle, draw=BKTemplate, thick, fill=codebg, rounded corners, minimum width=4.0cm, minimum height=1.55cm},
+  shardp/.style={rectangle, draw=dkblue, fill=blue!12, minimum width=1.45cm, minimum height=0.52cm, font=\scriptsize\bfseries},
+  shardr/.style={rectangle, draw=dkgreen, fill=green!12, minimum width=1.45cm, minimum height=0.52cm, font=\scriptsize}]
+  
+  \node[nodebox] (n1) at (0, 2.05) {};
+  \node[anchor=north west, font=\scriptsize\bfseries, text=BKTemplate] at (n1.north west) {Node 1 (Master/Data)};
+  \node[shardp] (p0) at (-0.95, 1.8) {Primary P0};
+  \node[shardr] (r1) at (0.95, 1.8) {Replica R1};
+
+  \node[nodebox] (n2) at (0, -0.55) {};
+  \node[anchor=south west, font=\scriptsize\bfseries, text=BKTemplate] at (n2.south west) {Node 2 (Data)};
+  \node[shardp] (p1) at (-0.95, -0.3) {Primary P1};
+  \node[shardr] (r0) at (0.95, -0.3) {Replica R0};
+
+  \draw[<->, thick, dashed, BKTemplate] (p0.south) -- (r0.north) node[midway, fill=white, inner sep=1.5pt, font=\tiny\bfseries, text=BKTemplate] {Replication};
+\end{tikzpicture}\par
+\vspace{0.08cm}
+\scriptsize
+\textit{Each shard combines an Inverted Index (search) + Doc Values (columnar storage for aggregations).}
+\end{column}
+\end{columns}
+\end{frame}
+
+%---------------------------------------------------------
+% SLIDE 6: ES Indexing Pipeline
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Elasticsearch Indexing Pipeline}
+\centering
+\begin{tikzpicture}[scale=0.82, transform shape,
+  stepbox/.style={rectangle, draw=BKTemplate, thick, fill=blue!6, rounded corners=3pt, minimum width=2.4cm, minimum height=0.95cm, align=center, font=\scriptsize\bfseries},
+  arr/.style={-{Stealth[length=2mm]}, thick, BKTemplate}]
+  
+  \node[stepbox] (s1) at (0,0) {1. Raw JSON\\Document};
+  \node[stepbox] (s2) at (3.2,0) {2. Route by\\$\text{hash}(\text{\_id}) \bmod P$};
+  \node[stepbox] (s3) at (6.4,0) {3. Text Analysis\\Pipeline};
+  \node[stepbox] (s4) at (9.6,0) {4. In-Memory\\Buffer + Translog};
+  \node[stepbox] (s5) at (12.8,0) {5. Lucene Segment\\(Inverted Index)};
+
+  \draw[arr] (s1) -- (s2);
+  \draw[arr] (s2) -- (s3);
+  \draw[arr] (s3) -- (s4);
+  \draw[arr] (s4) -- (s5);
+\end{tikzpicture}
+
+\vspace{0.15cm}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{block}{From JSON to Searchable Structures}
+\scriptsize
+\begin{enumerate}
+    \item \textbf{Document Ingestion:} JSON fields parsed according to index mapping (\texttt{text}, \texttt{keyword}, \texttt{float}).
+    \item \textbf{Analysis:} \texttt{text} fields pass through Character Filters $\rightarrow$ Tokenizer $\rightarrow$ Token Filters.
+    \item \textbf{Multi-Representation:}
+    \begin{itemize}
+        \scriptsize
+        \item \textbf{Inverted Index:} Token $\rightarrow$ Posting list.
+        \item \textbf{Doc Values:} Column-stride storage for sorting and aggregations.
+        \item \textbf{BKD Trees:} Multi-dimensional numeric/range indexing.
+    \end{itemize}
+\end{enumerate}
+\end{block}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{block}{Near Real-Time (NRT) Refresh \& Durability}
+\scriptsize
+\begin{itemize}
+    \item \textbf{In-Memory Buffer + Translog:} New documents are appended to the write-ahead \texttt{translog} for crash recovery and buffered in RAM.
+    \item \textbf{Refresh (every 1s):} Buffer is written to a new immutable \textbf{Lucene segment} in OS page cache $\rightarrow$ document becomes searchable.
+    \item \textbf{Flush \& Segment Merge:} Periodically commits segments to disk (\texttt{fsync}), clears translog, and merges smaller segments in the background.
+\end{itemize}
+\end{block}
+\end{column}
+\end{columns}
+\end{frame}
+
+%---------------------------------------------------------
+% SLIDE 7: ES Analyzers Deep Dive
+%---------------------------------------------------------
+\begin{frame}[fragile]
+\frametitle{Elasticsearch Analyzers Deep Dive}
+\begin{columns}[T]
+\begin{column}{0.51\textwidth}
+\textbf{\scriptsize Custom Analyzers (\texttt{demo/es/index\_mapping.json}):}
+\begin{lstlisting}
+"analysis": {
+  "analyzer": {
+    "english_custom": {
+      "type": "custom",
+      "tokenizer": "standard",
+      "filter": ["lowercase", "english_stemmer", "english_stop"]
+    },
+    "autocomplete": {
+      "type": "custom",
+      "tokenizer": "standard",
+      "filter": ["lowercase", "edge_ngram_2_15"]
+    }
+  },
+  "filter": {
+    "english_stemmer": { "type": "stemmer", "language": "english" },
+    "english_stop": { "type": "stop", "stopwords": "_english_" },
+    "edge_ngram_2_15": { "type": "edge_ngram", "min_gram": 2, "max_gram": 15 }
+  }
+}
+\end{lstlisting}
+\end{column}
+\begin{column}{0.46\textwidth}
+\textbf{\scriptsize Demo 9: \texttt{\_analyze} API Transformation}
+\scriptsize
+\begin{itemize}
+    \item \textbf{Input:} \texttt{"The professional cameras are featuring waterproof housings"}
+    \item \textbf{1. Standard Tokenizer:} Splits on word boundaries.
+    \item \textbf{2. Lowercase + Stop Filter:} Removes \texttt{"The"}.
+    \item \textbf{3. English Stemmer:} Reduces words to root stems:
+\end{itemize}
+\begin{lstlisting}
+["profession", "camera", "ar",
+ "featur", "waterproof", "hous"]
+\end{lstlisting}
+\textbf{\scriptsize Autocomplete (\texttt{edge\_ngram\_2\_15}):}
+\scriptsize
+\begin{itemize}
+    \item \texttt{"Samsung"} $\rightarrow$ \texttt{["sa", "sam", "sams", "samsu", "samsun", "samsung"]} at write time.
+    \item \texttt{search\_analyzer: "standard"} keeps queries fast.
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+%---------------------------------------------------------
+% SLIDE 8: ES Search Types Part 1
+%---------------------------------------------------------
+\begin{frame}[fragile]
+\frametitle{Elasticsearch Search Types -- Part 1: Text, Fuzzy \& Autocomplete}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{\scriptsize 1. Full-Text \texttt{match} Query (Demo 1)}
+\begin{lstlisting}
+{ "size": 3,
+  "query": {
+    "match": {
+      "description": "lightweight laptop for travel"
+    }
+  },
+  "_source": ["name", "category", "price", "rating"] }
+\end{lstlisting}
+\scriptsize
+\begin{itemize}
+    \item Analyzes query into stemmed tokens; ranks 2,042 matching docs via BM25 (\texttt{max\_score: 5.77}).
+\end{itemize}
+
+\textbf{\scriptsize 3. Edge N-Gram Autocomplete (Demo 3)}
+\begin{lstlisting}
+{ "size": 5,
+  "query": {
+    "match": { "name.autocomplete": "sams" }
+  },
+  "_source": ["name", "brand", "category"] }
+\end{lstlisting}
+\end{column}
+\begin{column}{0.49\textwidth}
+\textbf{\scriptsize 2. Fuzzy Multi-Match Query (Demo 2)}
+\begin{lstlisting}
+{ "size": 3,
+  "query": {
+    "multi_match": {
+      "query": "lapptop wireles",
+      "fields": ["name^2", "description"],
+      "fuzziness": "AUTO"
+    }
+  },
+  "_source": ["name", "category", "price"] }
+\end{lstlisting}
+\begin{block}{\scriptsize How Fuzzy \& Field Boosting Work}
+\scriptsize
+\begin{itemize}
+    \item \texttt{fuzziness: "AUTO"} allows Levenshtein edit distance 1 (3--5 chars) or 2 ($>5$ chars) via Levenshtein automata over the FST.
+    \item \texttt{"lapptop"} $\rightarrow$ \texttt{"laptop"} ($d=1$); \texttt{"wireles"} $\rightarrow$ \texttt{"wireless"} ($d=1$).
+    \item \texttt{name\string^2} doubles relevance weight of title matches.
+\end{itemize}
+\end{block}
+\end{column}
+\end{columns}
+\end{frame}
+
+%---------------------------------------------------------
+% SLIDE 9: ES Search Types Part 2
+%---------------------------------------------------------
+\begin{frame}[fragile]
+\frametitle{Elasticsearch Search Types -- Part 2: Bool, Aggregations \& Function Score}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{\scriptsize 4. Compound \texttt{bool} Query (Demo 4)}
+\begin{lstlisting}
+"query": { "bool": {
+  "must": [
+    { "match": { "description": "noise cancelling" } }
+  ],
+  "filter": [
+    { "term":  { "category": "headphones" } },
+    { "range": { "price":  { "lte": 100 } } },
+    { "range": { "rating": { "gte": 4.0 } } }
+  ]
+}}
+\end{lstlisting}
+\scriptsize
+\begin{itemize}
+    \item \textbf{Query Context (\texttt{must}):} Computes BM25 score.
+    \item \textbf{Filter Context (\texttt{filter}):} Binary yes/no ($0$ score overhead), cached in bitsets for fast reuse.
+\end{itemize}
+\end{column}
+\begin{column}{0.49\textwidth}
+\textbf{\scriptsize 5. Faceted Aggregations (Demo 5)}
+\begin{lstlisting}
+"size": 0,
+"aggs": { "by_category": {
+  "terms": { "field": "category" },
+  "aggs": {
+    "avg_price":  { "avg": { "field": "price" } },
+    "max_rating": { "max": { "field": "rating" } }
+  }
+}}
+\end{lstlisting}
+
+\textbf{\scriptsize 6. Custom Ranking (\texttt{function\_score}, Demo 6)}
+\begin{lstlisting}
+"query": { "function_score": {
+  "query": { "match": { "description": "camera" } },
+  "functions": [
+    { "field_value_factor": { "field": "rating", "factor": 1.2, "modifier": "sqrt" } },
+    { "field_value_factor": { "field": "review_count", "factor": 0.001, "modifier": "log1p" } }
+  ],
+  "boost_mode": "multiply"
+}}
+\end{lstlisting}
+\end{column}
+\end{columns}
+\end{frame}
+
+%---------------------------------------------------------
+% SLIDE 10: ES Relevance & Scoring
+%---------------------------------------------------------
+\begin{frame}[fragile]
+\frametitle{Elasticsearch Relevance \& Scoring: Explain API \& Highlighting}
+\begin{columns}[T]
+\begin{column}{0.52\textwidth}
+\textbf{\scriptsize Demo 8: \texttt{explain: true} for \texttt{"espresso grinder"}}
+\begin{lstlisting}
+"_id": "79", "_score": 2.6103396,
+"_source": { "name": "Nespresso MokaPro 440" },
+"_explanation": {
+  "value": 2.6103396,
+  "description": "weight(description:grinder in 78):",
+  "details": [{
+    "value": 2.6103396,
+    "description": "score(freq=1.0), boost * idf * tf:",
+    "details": [
+      { "value": 2.2, "description": "boost" },
+      { "value": 2.5000172,
+        "description": "idf, log(1+(N-n+0.5)/(n+0.5))",
+        "details": [{"value": 410, "description": "n"},
+                    {"value": 5000, "description": "N"}] },
+      { "value": 0.47460395,
+        "description": "tf, freq/(freq+k1*(1-b+b*dl/avgdl))",
+        "details": [{"value": 1.0, "description": "freq"},
+                    {"value": 14.0, "description": "dl"},
+                    {"value": 15.613, "description": "avgdl"}] }
+    ]
+  }]
+}
+\end{lstlisting}
+\end{column}
+\begin{column}{0.45\textwidth}
+\textbf{\scriptsize Exact BM25 Score Verification:}
+{\scriptsize
+\[
+\text{IDF} = \ln\!\left(1 + \frac{5000 - 410 + 0.5}{410 + 0.5}\right) = 2.5000
+\]
+\[
+\text{TF}_{\text{norm}} = \frac{1.0}{1.0 + 1.2\!\left(0.25 + 0.75\frac{14.0}{15.613}\right)} = 0.4746
+\]
+\[
+\text{Score} = 2.2 \times 2.5000 \times 0.4746 = \mathbf{2.6103}
+\]
+}
+\textbf{\scriptsize Demo 7: Search Highlighting}
+\begin{lstlisting}
+"highlight": { "fields": { "description": {} } }
+// Output fragment:
+"The Fujifilm AlphaShot 543 is a professional
+ <em>camera</em> (<em>action</em> <em>camera</em>)
+ featuring optical zoom 30x and <em>waterproof</em>"
+\end{lstlisting}
+\end{column}
+\end{columns}
+\end{frame}
+
+%=========================================================
+\section{Apache Cassandra: Scalable Wide-Column Store}
+%=========================================================
+
+%---------------------------------------------------------
+% SLIDE 11: Cassandra Overview
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Apache Cassandra Overview: Masterless Ring Architecture}
+\begin{columns}[T]
+\begin{column}{0.54\textwidth}
+\textbf{Decentralized Peer-to-Peer Design} \cite{cassandra,consistent_hashing}
+\scriptsize
+\begin{itemize}
+    \item \textbf{Masterless Ring Topology:} Every node plays an identical role; no single point of failure (SPOF).
+    \item \textbf{Consistent Hashing:} Partition key is hashed via \textbf{Murmur3Partitioner} ($\text{range } [-2^{63}, 2^{63}-1]$) to determine token ownership on the ring.
+    \item \textbf{Virtual Nodes (vnodes):} Each physical node owns multiple token ranges (e.g., 16--256 vnodes) for balanced data distribution and seamless cluster resizing.
+    \item \textbf{Coordinator Node:} Any node can receive a client request and route it directly in $O(1)$ hops to the replica nodes holding that token.
+    \item \textbf{Tunable Consistency:} Configure \texttt{ONE}, \texttt{QUORUM}, or \texttt{ALL} per query ($R + W > \text{RF}$ guarantees strong consistency).
+\end{itemize}
+\end{column}
+\begin{column}{0.43\textwidth}
+\centering
+\begin{tikzpicture}[scale=0.72, transform shape]
+  \draw[thick, BKTemplate, dashed] (0,0) circle (2.35cm);
+  \foreach \angle/\name in {90/Node 1, 30/Node 2, -30/Node 3, -90/Node 4, -150/Node 5, 150/Node 6} {
+    \node[circle, draw=BKTemplate, thick, fill=blue!12, minimum size=0.88cm, font=\scriptsize\bfseries, align=center] (\name) at (\angle:2.35cm) {\name};
+  }
+  \node[font=\tiny\bfseries, text=dkred, align=center, inner sep=1pt] (client) at (0,0) {Coordinator\\$\text{hash}(\texttt{'laptops'})$};
+  \draw[-{Stealth}, thick, dkred] (client) -- (Node 2) node[pos=0.45, above=1pt, sloped, font=\tiny] {Primary};
+  \draw[-{Stealth}, thick, dkred, dashed] (client) -- (Node 3) node[pos=0.45, below=1pt, sloped, font=\tiny] {Replica};
+  \draw[-{Stealth}, thick, dkred, dashed] (client) -- (Node 4);
+\end{tikzpicture}\par
+\vspace{0.08cm}
+\scriptsize
+\textit{Replication Factor (RF=3): token is replicated clockwise around the consistent hash ring.}
+\end{column}
+\end{columns}
+\end{frame}
+
+%---------------------------------------------------------
+% SLIDE 12: Cassandra Write Path
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Cassandra Write Path \& LSM-Tree Storage Engine}
+\centering
+\begin{tikzpicture}[scale=0.76, transform shape,
+  box/.style={rectangle, draw=BKTemplate, thick, fill=blue!6, rounded corners=3pt, minimum width=2.5cm, minimum height=0.95cm, align=center, font=\scriptsize\bfseries},
+  arr/.style={-{Stealth[length=2mm]}, thick, BKTemplate}]
+  
+  \node[box] (w) at (0,0) {Client Write\\(CQL \texttt{INSERT})};
+  \node[box, fill=red!8, draw=dkred] (cl) at (3.7, 0.72) {1. Commit Log\\(Disk Append-Only)};
+  \node[box, fill=green!8, draw=dkgreen] (mt) at (3.7, -0.72) {2. Memtable\\(RAM Sorted SkipList)};
+  \node[box] (sst) at (8.6, -0.72) {3. Flush to SSTable\\(Immutable on Disk)};
+  \node[box] (comp) at (13.6, -0.72) {4. Compaction\\(Merge \& Evict Tombstones)};
+
+  \draw[arr] (w.east) -- (cl.west);
+  \draw[arr] (w.east) -- (mt.west);
+  \draw[arr] (mt.east) -- node[above=2pt, font=\tiny\bfseries] {Threshold full} (sst.west);
+  \draw[arr] (sst.east) -- node[above=2pt, font=\tiny\bfseries] {Background} (comp.west);
+\end{tikzpicture}
+
+\vspace{0.15cm}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{block}{Why Writes Are Ultra-Fast ($O(1)$ Disk I/O)}
+\scriptsize
+\begin{itemize}
+    \item \textbf{No Read-Before-Write:} Unlike B-Trees, Cassandra never seeks or overwrites existing pages in place \cite{lsm}.
+    \item \textbf{Dual Write:} Sequential append to the \textbf{Commit Log} (durability) + insertion into the in-memory \textbf{Memtable} sorted by clustering key.
+\end{itemize}
+\end{block}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{block}{SSTables, Tombstones \& Compaction}
+\scriptsize
+\begin{itemize}
+    \item \textbf{SSTable (Sorted String Table):} Flushed sequentially to disk; completely immutable.
+    \item \textbf{Deletes = Tombstones:} Marker written with timestamp; reclaimed after \texttt{gc\_grace\_seconds}.
+    \item \textbf{Compaction:} Periodically merges multiple SSTables into one, keeping only the latest cell timestamp.
+\end{itemize}
+\end{block}
+\end{column}
+\end{columns}
+\end{frame}
+
+%---------------------------------------------------------
+% SLIDE 13: Cassandra Read Path
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Cassandra Read Path: Multi-Layer Filtering \& Merge}
+\centering
+\begin{tikzpicture}[scale=0.80, transform shape,
+  rbox/.style={rectangle, draw=BKTemplate, thick, fill=blue!6, rounded corners=3pt, minimum width=2.3cm, minimum height=0.9cm, align=center, font=\scriptsize\bfseries},
+  arr/.style={-{Stealth[length=2mm]}, thick, BKTemplate}]
+  
+  \node[rbox] (r1) at (0,0) {1. Check\\Memtable};
+  \node[rbox] (r2) at (3.0,0) {2. Row Cache\\(If Enabled)};
+  \node[rbox, fill=green!10, draw=dkgreen] (r3) at (6.0,0) {3. Bloom Filter\\(Per SSTable)};
+  \node[rbox] (r4) at (9.0,0) {4. Partition Key\\Cache \& Summary};
+  \node[rbox] (r5) at (12.0,0) {5. Compression\\Offset \& Merge};
+
+  \draw[arr] (r1) -- (r2);
+  \draw[arr] (r2) -- (r3);
+  \draw[arr] (r3) -- (r4);
+  \draw[arr] (r4) -- (r5);
+\end{tikzpicture}
+
+\vspace{0.15cm}
+\begin{columns}[T]
+\begin{column}{0.52\textwidth}
+\begin{block}{How Cassandra Avoids Reading Every SSTable}
+\scriptsize
+\begin{enumerate}
+    \item \textbf{Bloom Filter (RAM):} Probabilistic bit array per SSTable. Guarantees \emph{no false negatives} --- immediately skips SSTables that definitely do not contain the partition key.
+    \item \textbf{Key Cache \& Partition Summary:} Jumps directly to the byte offset in the Partition Index without extra disk seeks.
+    \item \textbf{Clustering Slice Optimization:} Min/max clustering column metadata skips SSTables outside the requested range (e.g., \texttt{price BETWEEN 500 AND 800}).
+\end{enumerate}
+\end{block}
+\end{column}
+\begin{column}{0.45\textwidth}
+\begin{alertblock}{Demo 8: Live \texttt{TRACING ON} Output}
+\scriptsize
+\begin{itemize}
+    \item \texttt{Executing single-partition query on products\_by\_category [ReadStage-1]} (25.7 ms)
+    \item \texttt{Skipped 0/0 non-slice-intersecting sstables} (27.0 ms)
+    \item \texttt{Merged data from memtables and 0 sstables} (29.4 ms)
+    \item \texttt{Read 3 live rows and 0 tombstone cells} (29.8 ms)
+\end{itemize}
+\end{alertblock}
+\end{column}
+\end{columns}
+\end{frame}
+
+%---------------------------------------------------------
+% SLIDE 14: Cassandra Query-First Design
+%---------------------------------------------------------
+\begin{frame}[fragile]
+\frametitle{Cassandra Query-First Data Modeling}
+\begin{columns}[T]
+\begin{column}{0.52\textwidth}
+\textbf{\scriptsize Schema Definition (\texttt{demo/cassandra/schema.cql}):}
+\begin{lstlisting}[language=SQL]
+CREATE KEYSPACE IF NOT EXISTS shop
+  WITH replication = {
+    'class': 'SimpleStrategy',
+    'replication_factor': 1
+  };
+
+CREATE TABLE IF NOT EXISTS shop.products_by_category (
+  category     text,
+  price        decimal,
+  product_id   int,
+  name         text,
+  brand        text,
+  description  text,
+  rating       float,
+  stock        int,
+  review_count int,
+  PRIMARY KEY ((category), price, product_id)
+) WITH CLUSTERING ORDER BY (price ASC, product_id ASC);
+\end{lstlisting}
+\end{column}
+\begin{column}{0.45\textwidth}
+\begin{block}{\scriptsize Anatomy of the Compound Primary Key}
+\scriptsize
+\texttt{PRIMARY KEY ((category), price, product\_id)}
+\begin{itemize}
+    \item \textbf{Partition Key \texttt{(category)}:} Determines \emph{which node/partition} stores the data via $\text{Murmur3}(\texttt{category})$. All laptops live together in one physical partition.
+    \item \textbf{Clustering Columns \texttt{(price, product\_id)}:} Determines the \emph{on-disk sort order} within that partition.
+    \item \texttt{product\_id} acts as tie-breaker so two products with the same price don't overwrite each other.
+\end{itemize}
+\end{block}
+\scriptsize
+\textbf{Result:} Category browse + price range filter is a \textbf{single sequential disk read} with zero secondary index overhead!
+\end{column}
+\end{columns}
+\end{frame}
+
+%---------------------------------------------------------
+% SLIDE 15: Cassandra SAI Indexes
+%---------------------------------------------------------
+\begin{frame}[fragile]
+\frametitle{Cassandra 5.0 Storage-Attached Indexes (SAI)}
+\begin{columns}[T]
+\begin{column}{0.49\textwidth}
+\textbf{\scriptsize SAI Definitions in \texttt{schema.cql}:}
+\begin{lstlisting}[language=SQL]
+CREATE CUSTOM INDEX IF NOT EXISTS idx_brand
+  ON shop.products_by_category (brand)
+  USING 'StorageAttachedIndex';
+
+CREATE CUSTOM INDEX IF NOT EXISTS idx_rating
+  ON shop.products_by_category (rating)
+  USING 'StorageAttachedIndex';
+\end{lstlisting}
+
+\begin{block}{\scriptsize How SAI Works Under the Hood \cite{sai}}
+\scriptsize
+\begin{itemize}
+    \item \textbf{SSTable-Attached Lifecycle:} Index files are written alongside SSTable flushes and merged during compaction.
+    \item \textbf{Strings (\texttt{brand}):} Indexed via memory-efficient \textbf{Byte-Ordered Tries}.
+    \item \textbf{Numerics (\texttt{rating}):} Indexed via balanced \textbf{BKD Trees} for range lookups.
+\end{itemize}
+\end{block}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{\scriptsize Legacy 2i vs. Cassandra 5.0 SAI}
+\vspace{0.05cm}
+\centering
+\tiny
+\begin{tabular}{p{1.9cm}p{1.9cm}p{2.0cm}}
+\toprule
+\textbf{Feature} & \textbf{Legacy 2i} & \textbf{SAI (Cassandra 5.0)} \\
+\midrule
+Storage Engine & Hidden CQL table & Attached to SSTable \\
+Write Overhead & High (extra write path) & Low (shared flush) \\
+Numeric Ranges & Poor support & Fast (BKD trees) \\
+Index Footprint & Large disk usage & 60--80\% smaller \\
+Multi-Index \texttt{AND} & Single index + filter & Intersects posting lists \\
+\bottomrule
+\end{tabular}
+\vspace{0.1cm}
+\raggedright
+\scriptsize
+\begin{alertblock}{\scriptsize Important Caveat}
+Without a partition key (\texttt{WHERE brand='Sony'}), SAI still performs a \textbf{scatter-gather} across ring nodes, though local SSTable lookup is much faster than full scan.
+\end{alertblock}
+\end{column}
+\end{columns}
+\end{frame}
+
+%---------------------------------------------------------
+% SLIDE 16: Cassandra Limitations for Search
+%---------------------------------------------------------
+\begin{frame}[fragile]
+\frametitle{Cassandra Limitations for Full-Text Search}
+\begin{columns}[T]
+\begin{column}{0.52\textwidth}
+\textbf{\scriptsize 1. Refusal on Unindexed Columns (Demo 5)}
+\begin{lstlisting}[language=SQL]
+SELECT name FROM shop.products_by_category
+WHERE stock > 100 LIMIT 5;
+-- InvalidRequest: Cannot execute this query as it
+-- might involve data filtering... use ALLOW FILTERING
+\end{lstlisting}
+
+\textbf{\scriptsize 2. The \texttt{ALLOW FILTERING} Anti-Pattern (Demo 6)}
+\begin{lstlisting}[language=SQL]
+SELECT name, stock FROM shop.products_by_category
+WHERE stock > 100 LIMIT 5 ALLOW FILTERING;
+\end{lstlisting}
+\scriptsize
+\begin{itemize}
+    \item Works on 5,000 demo rows, but in production forces coordinator to scan \textbf{every SSTable across every node}.
+\end{itemize}
+
+\textbf{\scriptsize 3. No \texttt{LIKE '\%...\%'} Substring Search (Demo 7)}
+\begin{lstlisting}[language=SQL]
+SELECT name FROM shop.products_by_category
+WHERE description LIKE '%laptop%' LIMIT 3;
+-- InvalidRequest: LIKE restriction is only supported
+-- on properly indexed columns.
+\end{lstlisting}
+\end{column}
+\begin{column}{0.45\textwidth}
+\begin{alertblock}{\scriptsize What Cassandra Cannot Do Natively}
+\scriptsize
+\begin{itemize}
+    \item \textbf{No Relevance Ranking (BM25):} Rows are returned strictly in token or clustering order --- no concept of ``best match''.
+    \item \textbf{No Fuzzy / Typo Tolerance:} Cannot match \texttt{"lapptop"} to \texttt{"laptop"}.
+    \item \textbf{No Stemming or Synonyms:} \texttt{"cameras"} will not match \texttt{"camera"} without custom analyzer pipelines.
+    \item \textbf{No Faceted Aggregations:} Computing \texttt{GROUP BY category} with \texttt{AVG(price)} across partitions is an anti-pattern.
+\end{itemize}
+\end{alertblock}
+\vspace{0.05cm}
+\scriptsize
+\textbf{Key Insight:} Cassandra's refusal is a \emph{feature}, protecting cluster SLA from unbounded latency.
+\end{column}
+\end{columns}
+\end{frame}
+
+%=========================================================
+\section{Comparative Analysis \& Combined Architecture}
+%=========================================================
+
+%---------------------------------------------------------
+% SLIDE 17: ES vs Cassandra Comparison
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Elasticsearch vs. Apache Cassandra: Side-by-Side Comparison}
+\centering
+\tiny
+\renewcommand{\arraystretch}{0.92}
+\begin{tabular}{p{2.5cm}p{5.4cm}p{5.4cm}}
+\toprule
+\textbf{Dimension} & \textbf{Elasticsearch 8.15} \cite{elastic_docs} & \textbf{Apache Cassandra 5.0} \cite{cassandra_docs} \\
+\midrule
+\textbf{Primary Paradigm} & Distributed Search \& Analytics Engine & Wide-Column Distributed NoSQL Store \\
+\midrule
+\textbf{Core Data Structure} & Lucene Inverted Index + FST + Doc Values + BKD Trees & Partitioned LSM-Tree (Memtable + Immutable SSTables) + SAI \\
+\midrule
+\textbf{Query Capabilities} & Full-text, BM25 ranking, fuzzy (Levenshtein), edge n-gram autocomplete, nested aggregations & $O(1)$ partition key lookup, clustering range scans, exact/range SAI filtering \\
+\midrule
+\textbf{Data Modeling} & Schema-flexible JSON; index all searchable fields (\emph{Document-First}) & Denormalized tables per access pattern (\emph{Query-First}) \\
+\midrule
+\textbf{Write Performance} & Medium--High (CPU tokenization/indexing, NRT 1s refresh delay) & Ultra-High (append-only commit log + RAM memtable, immediate visibility) \\
+\midrule
+\textbf{Scalability \& Topology} & Dedicated Master/Data nodes; shard rebalancing required when scaling & Masterless consistent-hashing ring with vnodes; linear horizontal write scaling \\
+\midrule
+\textbf{Consistency Model} & Eventual read visibility (1s refresh); primary $\rightarrow$ replica sync writes & Tunable per operation (\texttt{ONE}, \texttt{LOCAL\_QUORUM}, \texttt{ALL}) \\
+\midrule
+\textbf{Ideal Use Case} & Product discovery, log analytics, ad-hoc user queries, faceted navigation & High-velocity writes, source-of-truth order/catalog storage, time-series \\
+\bottomrule
+\end{tabular}
+\end{frame}
+
+%---------------------------------------------------------
+% SLIDE 18: Combined Architecture
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Combined Production Architecture: Best of Both Worlds}
+\centering
+\begin{tikzpicture}[scale=0.78, transform shape,
+  svc/.style={rectangle, draw=BKTemplate, thick, fill=blue!8, rounded corners=3pt, minimum width=2.6cm, minimum height=1.0cm, align=center, font=\scriptsize\bfseries},
+  db/.style={rectangle, draw=dkblue, thick, fill=codebg, rounded corners=4pt, minimum width=3.2cm, minimum height=1.1cm, align=center, font=\scriptsize\bfseries},
+  arr/.style={-{Stealth[length=2mm]}, thick, BKTemplate}]
+  
+  \node[svc] (app) at (0, 0) {Client / API\\Gateway};
+  \node[db, fill=green!10, draw=dkgreen] (cass) at (6.5, 1.25) {Apache Cassandra\\(Source of Truth)};
+  \node[svc, fill=orange!12, draw=orange!80!black] (kafka) at (11.8, 1.25) {CDC / Kafka\\Event Stream};
+  \node[db, fill=blue!12, draw=dkblue] (es) at (11.8, -1.05) {Elasticsearch\\(Search \& Facet Index)};
+
+  \draw[arr, dkgreen] (app.north east) -- node[above=2pt, sloped, font=\tiny\bfseries] {1. Writes \& Point Reads ($O(1)$)} (cass.west);
+  \draw[arr, orange!80!black] (cass.east) -- node[above=2pt, font=\tiny\bfseries] {2. Async CDC} (kafka.west);
+  \draw[arr, orange!80!black] (kafka.south) -- node[right=3pt, font=\tiny\bfseries] {3. Bulk Index} (es.north);
+  \draw[arr, dkblue] (app.south east) -- node[below=2pt, sloped, font=\tiny\bfseries] {4. Full-Text, Fuzzy \& Facet Queries} (es.west);
+\end{tikzpicture}
+
+\vspace{0.1cm}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{block}{\scriptsize Synchronization Patterns}
+\scriptsize
+\begin{itemize}
+    \item \textbf{Change Data Capture (CDC) + Kafka:} Cassandra commits writes first; CDC connector streams mutations to Kafka, which bulk-indexes into Elasticsearch.
+    \item \textbf{Application Dual-Write:} Simpler for small systems, but requires idempotent retries to prevent drift.
+\end{itemize}
+\end{block}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{block}{\scriptsize Industry Examples (Netflix, Discord, eBay)}
+\scriptsize
+\begin{itemize}
+    \item \textbf{Discord / E-Commerce Pattern:}
+    \begin{enumerate}
+        \scriptsize
+        \item User searches \texttt{"noise cancelling headphones"} $\rightarrow$ ES returns ranked \texttt{product\_id}s \& facets.
+        \item Checkout/Inventory service queries \textbf{Cassandra} by key for authoritative stock and price.
+    \end{enumerate}
+\end{itemize}
+\end{block}
+\end{column}
+\end{columns}
+\end{frame}
+
+%=========================================================
+\section{Experimental Demo \& Live Results}
+%=========================================================
+
+%---------------------------------------------------------
+% SLIDE 19: Demo Setup
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Experimental Demo Setup: E-Commerce Product Catalog}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
+\textbf{\scriptsize Synthetic Dataset (\texttt{generate\_data.py}, $\text{seed}=42$)}
+\scriptsize
+\begin{itemize}
+    \item \textbf{Volume:} $N = 5,000$ synthetic products loaded identically into \texttt{products\_bulk.ndjson} (ES) and \texttt{products.csv} (Cassandra).
+    \item \textbf{9 Attributes:} \texttt{product\_id}, \texttt{name}, \texttt{category}, \texttt{brand}, \texttt{description}, \texttt{price}, \texttt{rating}, \texttt{stock}, \texttt{review\_count}.
+\end{itemize}
+\vspace{0.05cm}
+\centering
+\tiny
+\begin{tabular}{lll}
+\toprule
+\textbf{Category} & \textbf{Price (\$)} & \textbf{Sample Brands} \\
+\midrule
+\texttt{laptops}         & 450--3,500 & Dell, Asus, Lenovo, Apple, HP, MSI \\
+\texttt{smartphones}     & 200--1,800 & Samsung, Apple, Xiaomi, Sony, Google \\
+\texttt{headphones}      & 25--550    & Sony, Bose, JBL, Anker, Sennheiser \\
+\texttt{cameras}         & 150--4,200 & Canon, Nikon, Sony, Fujifilm, GoPro \\
+\texttt{coffee machines} & 40--1,200  & DeLonghi, Breville, Philips, Nespresso \\
+\texttt{running shoes}   & 35--280    & Nike, Adidas, Asics, New Balance, Hoka \\
+\bottomrule
+\end{tabular}
+\end{column}
+\begin{column}{0.42\textwidth}
+\textbf{\scriptsize Docker Compose Stack (\texttt{demo/docker-compose.yml})}
+\vspace{0.1cm}
+\centering
+\begin{tikzpicture}[scale=0.74, transform shape,
+  cbox/.style={rectangle, draw=BKTemplate, thick, fill=codebg, rounded corners=3pt, minimum width=5.6cm, minimum height=0.95cm, align=center, font=\scriptsize}]
+  
+  \node[cbox, fill=blue!10] (es) at (0, 2.4) {\textbf{de-elasticsearch} (ES 8.15.3)\\Port \texttt{9200} $\cdot$ Single-Node $\cdot$ 1GB Heap};
+  \node[cbox, fill=green!10] (cass) at (0, 1.1) {\textbf{de-cassandra} (Cassandra 5.0)\\Port \texttt{9042} $\cdot$ Keyspace \texttt{shop} + 2 SAI Indexes};
+  \node[cbox, fill=orange!10] (kib) at (0, -0.2) {\textbf{de-kibana} (Kibana 8.15.3)\\Port \texttt{5601} $\cdot$ Dev Tools Console};
+  \node[cbox, fill=gray!15] (gen) at (0, -1.5) {\textbf{generate\_data.py} (5,000 Products)\\$\rightarrow$ \texttt{\_bulk} API (ES) \& \texttt{COPY FROM} (CQL)};
+
+  \draw[-{Stealth[length=2mm]}, thick, dkblue] (gen.west) -- ++(-0.4, 0) |- (es.west);
+  \draw[-{Stealth[length=2mm]}, thick, dkgreen] (gen.east) -- ++(0.4, 0) |- (cass.east);
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\end{frame}
+
+%---------------------------------------------------------
+% SLIDE 20: Demo: ES Full-text & Fuzzy
+%---------------------------------------------------------
+\begin{frame}[fragile]
+\frametitle{Live Demo: Elasticsearch Full-Text (BM25) \& Fuzzy Search}
+\begin{columns}[T]
+\begin{column}{0.49\textwidth}
+\textbf{\scriptsize Demo 1: Full-Text Search (BM25 Ranking)}
+\begin{lstlisting}
+POST /products/_search
+{ "size": 3,
+  "query": { "match": {
+    "description": "lightweight laptop for travel"
+  }},
+  "_source": ["name", "category", "price", "rating"] }
+\end{lstlisting}
+\textbf{\scriptsize Real Execution Output (2,042 hits, 50 ms):}
+\begin{lstlisting}
+"hits": [
+  { "_id": "958",  "_score": 5.7693315,
+    "_source": { "name": "HP WorkStation 438",
+      "category": "laptops", "price": 2594.98, "rating": 5.0 } },
+  { "_id": "1067", "_score": 5.7693315,
+    "_source": { "name": "Apple WorkStation 842",
+      "category": "laptops", "price": 1672.26, "rating": 4.4 } },
+  { "_id": "1587", "_score": 5.7693315,
+    "_source": { "name": "Lenovo GameMaster 592",
+      "category": "laptops", "price": 2527.12, "rating": 4.0 } }
+]
+\end{lstlisting}
+\end{column}
+\begin{column}{0.49\textwidth}
+\textbf{\scriptsize Demo 2: Fuzzy Search with Typos}
+\begin{lstlisting}
+POST /products/_search
+{ "size": 3,
+  "query": { "multi_match": {
+    "query": "lapptop wireles",
+    "fields": ["name^2", "description"],
+    "fuzziness": "AUTO"
+  }},
+  "_source": ["name", "category", "price"] }
+\end{lstlisting}
+\textbf{\scriptsize Real Execution Output (843 hits, 48 ms):}
+\begin{lstlisting}
+"hits": [
+  { "_id": "65",  "_score": 1.507406,
+    "_source": { "name": "HP AirLite 720",
+      "category": "laptops", "price": 3073.51 } },
+  { "_id": "168", "_score": 1.507406,
+    "_source": { "name": "HP UltraBook 295",
+      "category": "laptops", "price": 1709.53 } },
+  { "_id": "262", "_score": 1.507406,
+    "_source": { "name": "Asus ProBook 923",
+      "category": "laptops", "price": 2809.26 } }
+]
+\end{lstlisting}
+\end{column}
+\end{columns}
+\end{frame}
+
+%---------------------------------------------------------
+% SLIDE 21: Demo: ES Aggregations & Bool Filter
+%---------------------------------------------------------
+\begin{frame}[fragile]
+\frametitle{Live Demo: Elasticsearch Bool Filters \& Faceted Aggregations}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{\scriptsize Demo 4: Bool Query + Structured Filters}
+\begin{lstlisting}
+{ "size": 3,
+  "query": { "bool": {
+    "must": [{ "match": {"description": "noise cancelling"} }],
+    "filter": [
+      { "term":  { "category": "headphones" } },
+      { "range": { "price":  { "lte": 100 } } },
+      { "range": { "rating": { "gte": 4.0 } } }
+    ]
+  }},
+  "_source": ["name", "price", "rating"] }
+\end{lstlisting}
+\textbf{\scriptsize Real Execution Output (14 hits, 28 ms):}
+\begin{lstlisting}
+"hits": [
+  { "_id": "1058", "_score": 6.52806,
+    "_source": { "name": "Anker QuietComfort 535",
+                 "price": 43.28, "rating": 4.6 } },
+  { "_id": "1717", "_score": 6.52806,
+    "_source": { "name": "Anker SoundCore 251",
+                 "price": 80.98, "rating": 4.1 } },
+  { "_id": "2604", "_score": 6.52806,
+    "_source": { "name": "Sennheiser StudioPro 709",
+                 "price": 79.21, "rating": 4.2 } }
+]
+\end{lstlisting}
+\end{column}
+\begin{column}{0.49\textwidth}
+\textbf{\scriptsize Demo 5: Faceted Aggregations (\texttt{doc\_values})}
+\begin{lstlisting}
+{ "size": 0,
+  "aggs": { "by_category": {
+    "terms": { "field": "category" },
+    "aggs": {
+      "avg_price":  { "avg": { "field": "price" } },
+      "max_rating": { "max": { "field": "rating" } }
+    }
+  }} }
+\end{lstlisting}
+\textbf{\scriptsize Real Execution Output (All 5,000 docs):}
+\vspace{0.05cm}
+\centering
+\tiny
+\begin{tabular}{lrrr}
+\toprule
+\textbf{Category Bucket} & \textbf{Doc Count} & \textbf{Avg Price (\$)} & \textbf{Max Rating} \\
+\midrule
+\texttt{running shoes}   & 857 & 159.89   & 5.0 \\
+\texttt{cameras}         & 855 & 2,152.66 & 5.0 \\
+\texttt{laptops}         & 843 & 1,927.43 & 5.0 \\
+\texttt{coffee machines} & 838 & 612.65   & 5.0 \\
+\texttt{smartphones}     & 832 & 992.26   & 5.0 \\
+\texttt{headphones}      & 775 & 287.14   & 5.0 \\
+\bottomrule
+\end{tabular}
+\end{column}
+\end{columns}
+\end{frame}
+
+%---------------------------------------------------------
+% SLIDE 22: Demo: Cassandra Partition Key & SAI
+%---------------------------------------------------------
+\begin{frame}[fragile]
+\frametitle{Live Demo: Cassandra Partition Key, Clustering Range \& SAI}
+\begin{columns}[T]
+\begin{column}{0.49\textwidth}
+\textbf{\scriptsize Demo 1: Partition-Key Lookup ($O(1)$ Routing)}
+\begin{lstlisting}[language=SQL]
+CQL> SELECT name, price, rating
+     FROM shop.products_by_category
+     WHERE category='laptops' LIMIT 5;
+
+ name               | price  | rating
+--------------------+--------+--------
+     HP AirLite 555 | 454.77 |    3.9
+   Dell AirLite 469 | 455.93 |    4.5
+  Apple AirLite 876 |  462.8 |    3.8
+ MSI GameMaster 540 | 466.59 |    4.1
+   Dell ProBook 703 | 471.81 |    3.8
+\end{lstlisting}
+
+\textbf{\scriptsize Demo 2: Partition + Clustering Range}
+\begin{lstlisting}[language=SQL]
+CQL> SELECT name, price FROM shop.products_by_category
+     WHERE category='laptops'
+       AND price>=500 AND price<=800 LIMIT 5;
+
+ name                 | price
+----------------------+--------
+     Dell AirLite 207 | 502.67
+   Dell UltraBook 557 | 509.93
+     HP UltraBook 523 | 510.02
+\end{lstlisting}
+\end{column}
+\begin{column}{0.49\textwidth}
+\textbf{\scriptsize Demo 3: SAI Equality Index on \texttt{brand}}
+\begin{lstlisting}[language=SQL]
+CQL> SELECT name, category, price
+     FROM shop.products_by_category
+     WHERE brand='Sony' LIMIT 5;
+
+ name               | category    | price
+--------------------+-------------+--------
+    Sony Galaxy 824 | smartphones |  202.1
+  Sony RedMagic 574 | smartphones |  210.2
+    Sony Galaxy 930 | smartphones | 248.77
+    Sony Xperia 893 | smartphones |  252.4
+ Sony Pixel Pro 948 | smartphones | 270.12
+\end{lstlisting}
+
+\textbf{\scriptsize Demo 4: Partition Key + SAI Numeric Range}
+\begin{lstlisting}[language=SQL]
+CQL> SELECT name, rating, price
+     FROM shop.products_by_category
+     WHERE category='laptops' AND rating>=4.5 LIMIT 5;
+
+ name                  | rating | price
+-----------------------+--------+--------
+      Dell AirLite 469 |    4.5 | 455.93
+       MSI ProBook 984 |    4.9 | 477.91
+ Apple WorkStation 852 |    4.9 | 481.92
+\end{lstlisting}
+\end{column}
+\end{columns}
+\end{frame}
+
+%---------------------------------------------------------
+% SLIDE 23: Demo: Cassandra Anti-patterns
+%---------------------------------------------------------
+\begin{frame}[fragile]
+\frametitle{Live Demo: Cassandra Anti-Patterns \& Search Failures}
+\begin{columns}[T]
+\begin{column}{0.52\textwidth}
+\textbf{\scriptsize 1. Filtering Without Index $\rightarrow$ Refused! (Demo 5)}
+\begin{lstlisting}[language=SQL]
+CQL> SELECT name FROM shop.products_by_category
+     WHERE stock > 100 LIMIT 5;
+
+InvalidRequest: Error from server: code=2200 [Invalid query]
+message="Cannot execute this query as it might involve data
+filtering and thus may have unpredictable performance. If you
+want to execute this query despite the performance
+unpredictability, use ALLOW FILTERING"
+\end{lstlisting}
+
+\textbf{\scriptsize 2. Full-Text \texttt{LIKE} Pattern $\rightarrow$ Refused! (Demo 7)}
+\begin{lstlisting}[language=SQL]
+CQL> SELECT name FROM shop.products_by_category
+     WHERE description LIKE '%laptop%' LIMIT 3;
+
+InvalidRequest: Error from server: code=2200 [Invalid query]
+message="LIKE restriction is only supported on properly
+indexed columns. description LIKE '%laptop%' is not valid."
+\end{lstlisting}
+\end{column}
+\begin{column}{0.45\textwidth}
+\textbf{\scriptsize 3. Forcing \texttt{ALLOW FILTERING} (Demo 6)}
+\begin{lstlisting}[language=SQL]
+CQL> SELECT name, stock
+     FROM shop.products_by_category
+     WHERE stock > 100 LIMIT 5
+     ALLOW FILTERING;
+
+ name                     | stock
+--------------------------+-------
+ Breville BrewPerfect 454 |   488
+ DeLonghi BrewPerfect 161 |   175
+  Philips BrewPerfect 968 |   332
+    Nespresso MokaPro 354 |   456
+     Breville MokaPro 381 |   253
+\end{lstlisting}
+\begin{alertblock}{\scriptsize Why This Matters in Production}
+\scriptsize
+\begin{itemize}
+    \item \texttt{ALLOW FILTERING} scans all partitions until \texttt{LIMIT 5} is satisfied (or scans 100\% of the cluster if $<5$ rows match).
+    \item \textbf{Takeaway:} Never use Cassandra for ad-hoc text search; pair it with Elasticsearch!
+\end{itemize}
+\end{alertblock}
+\end{column}
+\end{columns}
+\end{frame}
+
+%=========================================================
+\section{Conclusion}
+%=========================================================
+
+%---------------------------------------------------------
+% SLIDE 24: Conclusion
+%---------------------------------------------------------
+\begin{frame}
+\frametitle{Conclusion \& Key Takeaways}
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\begin{block}{\scriptsize 1. Elasticsearch = Discovery \& Relevance}
+\scriptsize
+\begin{itemize}
+    \item Answers \textbf{unstructured, user-typed queries} via Lucene inverted indexes, custom analyzers (stemming, stopwords, edge n-grams), and FSTs.
+    \item Provides \textbf{Okapi BM25 ranking}, typo-tolerant fuzzy search, highlighting, and real-time faceted aggregations via columnar \texttt{doc\_values}.
+\end{itemize}
+\end{block}
+\begin{block}{\scriptsize 2. Cassandra = Predictable Scale}
+\scriptsize
+\begin{itemize}
+    \item Answers \textbf{known, structured access patterns} in $O(1)$ network hops via consistent hashing and sorted LSM-Tree partitions.
+    \item Cassandra 5.0 \textbf{SAI} enables efficient secondary attribute filtering, but purposefully omits full-text relevance ranking.
+\end{itemize}
+\end{block}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{alertblock}{\scriptsize 3. Architectural Synthesis}
+\scriptsize
+\begin{itemize}
+    \item \textbf{Right Tool for the Job:} Neither database replaces the other; their internal data structures (\emph{Inverted Index vs. Partitioned LSM-Tree}) are optimized for fundamentally different workloads.
+    \item \textbf{Production Standard:} Combine \textbf{Cassandra as the durable source of truth} with \textbf{Elasticsearch as the search index}, synchronized asynchronously via Change Data Capture (CDC) and Kafka.
+\end{itemize}
+\end{alertblock}
+\vspace{0.1cm}
+\centering
+\scriptsize
+\textbf{Reproducible Artifact:} Full Docker stack, 5,000-product generator, ES mappings, CQL schema, and 17 live demo queries included in repository.
+\end{column}
+\end{columns}
+\end{frame}
+
+%---------------------------------------------------------
+% SLIDE 25: References
+%---------------------------------------------------------
+\begin{frame}[allowframebreaks]
+\frametitle{References}
+\nocite{*}
+\printbibliography[heading=none]
+\end{frame}
+
+%---------------------------------------------------------
+% SLIDE 26: Thank You / Q&A
+%---------------------------------------------------------
+\setbeamertemplate{footline}{}
+\begin{frame}
+    \centering
+    \vspace{0.8cm}
+    \textbf{\Huge{- THANK YOU -}}\\[0.3cm]
+    \textit{\Large{Questions \& Answers (Q\&A)}}\\[0.6cm]
+    \small
+    \begin{tabular}{rl}
+        \textbf{Course:} & Data Engineering (CO5173) -- Semester 261 \\
+        \textbf{Supervisor:} & Assoc. Prof. \vn{Trần Minh Quang} \\
+        \textbf{Students:} & \vn{Đặng Kiến Tường} (2670391) -- \vn{Đặng Minh Quân} (2670358) \\
+        \textbf{Live Demo:} & Elasticsearch (\texttt{:9200}) $\cdot$ Kibana (\texttt{:5601}) $\cdot$ Cassandra 5.0 (\texttt{:9042})
+    \end{tabular}
+\end{frame}
+
+\end{document}

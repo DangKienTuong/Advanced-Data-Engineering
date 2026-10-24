@@ -1,0 +1,50 @@
+\frametitle{Live Demo: Cassandra Anti-Patterns \& Search Failures}
+\begin{columns}[T]
+\begin{column}{0.52\textwidth}
+\textbf{\scriptsize 1. Filtering Without Index $\rightarrow$ Refused! (Demo 5)}
+\begin{lstlisting}[language=SQL]
+CQL> SELECT name FROM shop.products_by_category
+     WHERE stock > 100 LIMIT 5;
+
+InvalidRequest: Error from server: code=2200 [Invalid query]
+message="Cannot execute this query as it might involve data
+filtering and thus may have unpredictable performance. If you
+want to execute this query despite the performance
+unpredictability, use ALLOW FILTERING"
+\end{lstlisting}
+
+\textbf{\scriptsize 2. Full-Text \texttt{LIKE} Pattern $\rightarrow$ Refused! (Demo 7)}
+\begin{lstlisting}[language=SQL]
+CQL> SELECT name FROM shop.products_by_category
+     WHERE description LIKE '%laptop%' LIMIT 3;
+
+InvalidRequest: Error from server: code=2200 [Invalid query]
+message="LIKE restriction is only supported on properly
+indexed columns. description LIKE '%laptop%' is not valid."
+\end{lstlisting}
+\end{column}
+\begin{column}{0.45\textwidth}
+\textbf{\scriptsize 3. Forcing \texttt{ALLOW FILTERING} (Demo 6)}
+\begin{lstlisting}[language=SQL]
+CQL> SELECT name, stock
+     FROM shop.products_by_category
+     WHERE stock > 100 LIMIT 5
+     ALLOW FILTERING;
+
+ name                     | stock
+--------------------------+-------
+ Breville BrewPerfect 454 |   488
+ DeLonghi BrewPerfect 161 |   175
+  Philips BrewPerfect 968 |   332
+    Nespresso MokaPro 354 |   456
+     Breville MokaPro 381 |   253
+\end{lstlisting}
+\begin{alertblock}{\scriptsize Why This Matters in Production}
+\scriptsize
+\begin{itemize}
+    \item \texttt{ALLOW FILTERING} scans all partitions until \texttt{LIMIT 5} is satisfied (or scans 100\% of the cluster if $<5$ rows match).
+    \item \textbf{Takeaway:} Never use Cassandra for ad-hoc text search; pair it with Elasticsearch!
+\end{itemize}
+\end{alertblock}
+\end{column}
+\end{columns}
