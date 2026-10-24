@@ -120,41 +120,6 @@ Students: \vn{Đặng Kiến Tường} (2670391) -- \vn{Đặng Minh Quân} (267
 \tableofcontents
 \end{frame}
 
-%---------------------------------------------------------
-% SLIDE 3: Team Members & Contribution Claim
-%---------------------------------------------------------
-\begin{frame}
-\frametitle{Team Members \& Contribution Matrix}
-\centering
-\tiny
-\renewcommand{\arraystretch}{0.96}
-\begin{tabular}{p{2.9cm}p{4.9cm}p{4.9cm}c}
-\toprule
-\textbf{Project Module} & \textbf{\vn{Đặng Kiến Tường} (2670391)} & \textbf{\vn{Đặng Minh Quân} (2670358)} & \textbf{Weight} \\
-\midrule
-\textbf{1. Search Theory \& Math Foundations} & Inverted Index, FST, Skip Lists, Roaring Bitmaps, Okapi BM25 derivation \& manual verification & Consistent Hashing, LSM-Tree mechanics, HNSW vs. DiskANN/JVector \& Reciprocal Rank Fusion (RRF) & 20\% \\
-\midrule
-\textbf{2. Elasticsearch 8.15 Engine \& Queries} & Custom analyzers (\texttt{english\_custom}, \texttt{edge\_ngram}), \texttt{index\_mapping.json}, 10 live ES queries, DFS IDF analysis & HNSW \texttt{dense\_vector} mapping, hybrid lexical + kNN search tuning, Kibana Dev Tools validation & 25\% \\
-\midrule
-\textbf{3. Cassandra 5.0 Engine \& SAI} & Partition/clustering physical schema, Wide-Partition bucketing \& Compaction (\texttt{STCS}/\texttt{LCS}/\texttt{UCS}) & SAI Trie, BKD-Tree \& JVector \texttt{ANN OF} indexes, \texttt{nodetool flush}, SSTable \texttt{.db} file inspection & 25\% \\
-\midrule
-\textbf{4. Data Pipeline \& Benchmark Suite} & \texttt{generate\_data.py} ($N = 50,000$ products, variable-length text, 8D vectors), Docker Compose stack & \texttt{benchmark.py} ($p_{50}/p_{95}$ latency suite \& $5\text{K}\rightarrow 50\text{K}$ scaling stress test), CDC architecture & 30\% \\
-\midrule
-\textbf{Overall Contribution} & \textbf{50\% (Co-Lead: Sections 1, 2 \& Demo Part A)} & \textbf{50\% (Co-Lead: Sections 3, 4, 5 \& Demo Part B)} & \textbf{100\%} \\
-\bottomrule
-\end{tabular}
-
-\vspace{0.06cm}
-\begin{block}{\tiny Alignment with CO5173 Course Learning Outcomes}
-\tiny
-\begin{itemize}
-    \item \textbf{L.O.1 (Conceptual, Logical \& Physical DB Design):} Contrasts Document-First inverted indexing vs. Query-First wide-column partitioning.
-    \item \textbf{L.O.2 (Data Integration Architecture):} Designs a fault-tolerant polyglot architecture syncing Cassandra (Source of Truth) to Elasticsearch via Kafka CDC.
-    \item \textbf{L.O.3 (Modern Paradigms \& Research):} Evaluates 2026-era hybrid lexical + dense vector search (HNSW vs. Cassandra 5.0 SAI JVector) on $50,000$ records.
-\end{itemize}
-\end{block}
-\end{frame}
-
 %=========================================================
 \section{Introduction \& Search Fundamentals}
 %=========================================================
